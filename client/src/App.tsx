@@ -5,7 +5,7 @@ import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
 import { useAppContext } from "./context/AppContext";
 import Login from "./components/Login";
-import React, { Suspense, useEffect, useRef } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import LoadingPage from "./components/LoadingPage";
 
 const Home = React.lazy(() => import("./pages/Home"))
@@ -52,9 +52,20 @@ const App = () => {
   const isSellerPath = useLocation().pathname.includes("seller");
   const { showUserLogin } = useAppContext();
   const rootRef = useRef<HTMLDivElement>(null);
+  const [isReady, setIsReady] = useState(false);
   useEffect(() => {
     window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
   }, [location.pathname]);
+  if (!isReady) {
+    setTimeout(() => {
+      setIsReady(true)
+    }, 860)
+    return (
+      <>
+        <LoadingPage />
+      </>
+    )
+  }
   return (
     <Suspense fallback={<LoadingPage />}>
       <div className="flex flex-col min-h-screen relative" ref={rootRef}>
