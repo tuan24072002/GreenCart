@@ -21,6 +21,7 @@ const Products = () => {
     }, [products, searchQuery])
     return (
         <Title
+            showBreadcrumb
             title="All Products"
             highlight>
             <div className="flex flex-col lg:flex-row gap-6">

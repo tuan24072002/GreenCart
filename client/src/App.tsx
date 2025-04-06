@@ -1,5 +1,5 @@
-import { Route, Routes, useLocation } from "react-router-dom"
-import Navbar from "./components/Navbar"
+import { Route, Routes, useLocation } from "react-router-dom";
+import Navbar from "./components/Navbar";
 import { cn } from "./lib/utils";
 import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
@@ -8,13 +8,15 @@ import Login from "./components/Login";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import LoadingPage from "./components/LoadingPage";
 
-const Home = React.lazy(() => import("./pages/Home"))
-const Products = React.lazy(() => import("./pages/Products"))
-const ProductCategory = React.lazy(() => import("./pages/ProductCategory"))
-const ProductDetail = React.lazy(() => import("./pages/ProductDetail"))
-const Cart = React.lazy(() => import("./pages/Cart"))
-const AddAddress = React.lazy(() => import("./pages/AddAddress"))
-const MyOrders = React.lazy(() => import("./pages/MyOrders"))
+const Home = React.lazy(() => import("./pages/Home"));
+const Products = React.lazy(() => import("./pages/Products"));
+const ProductCategory = React.lazy(() => import("./pages/ProductCategory"));
+const ProductDetail = React.lazy(() => import("./pages/ProductDetail"));
+const Cart = React.lazy(() => import("./pages/Cart"));
+const AddAddress = React.lazy(() => import("./pages/AddAddress"));
+const MyOrders = React.lazy(() => import("./pages/MyOrders"));
+const Contact = React.lazy(() => import("./pages/Contact"));
+const Settings = React.lazy(() => import("./pages/Settings"));
 
 const pageList = [
   {
@@ -45,6 +47,14 @@ const pageList = [
     path: "/my-orders",
     element: <MyOrders />,
   },
+  {
+    path: "/contact",
+    element: <Contact />
+  },
+  {
+    path: "/settings/*",
+    element: <Settings />
+  }
 ];
 
 const App = () => {
@@ -68,7 +78,7 @@ const App = () => {
   }
   return (
     <Suspense fallback={<LoadingPage />}>
-      <div className="flex flex-col min-h-screen relative" ref={rootRef}>
+      <div className="flex flex-col min-h-screen relative bg-[#fff]" ref={rootRef}>
         {isSellerPath ? null : <Navbar />}
         <div className={cn(!isSellerPath && "px-6 md:px-16 lg:px-24 xl:px-32 flex-1")}>
           <Routes>

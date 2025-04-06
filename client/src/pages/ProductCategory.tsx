@@ -27,10 +27,12 @@ const ProductCategory = () => {
             ));
         }
     }, [category, products, searchQuery])
+
     return (
         filteredProducts.length > 0 ?
             <Title
                 highlight
+                showBreadcrumb
                 title={category as string}>
                 <div className="flex flex-col lg:flex-row gap-6">
                     <FilterDropdown category={category as string} className="lg:w-1/6 w-full mt-6 grid lg:grid-cols-1 md:grid-cols-4 grid-cols-2 h-fit gap-6 md:gap-3" />

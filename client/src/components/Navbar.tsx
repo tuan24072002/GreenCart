@@ -35,7 +35,7 @@ const Navbar = () => {
                     </button>
                 </div>
             </CSSTransition>
-            <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 bg-white relative transition-all">
+            <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-gray-300 relative transition-all">
 
                 <NavLink to={"/"} onClick={() => setOpen(false)}>
                     <img className="h-9" src={assets.logo} alt="dummyLogoColored" />
@@ -76,6 +76,10 @@ const Navbar = () => {
                                         onClick={() => navigate("/my-orders")}
                                         className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer"
                                     >My Orders</li>
+                                    <li
+                                        onClick={() => navigate("/settings")}
+                                        className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer"
+                                    >Settings</li>
                                     <li
                                         className="p-1.5 pl-3 hover:bg-primary/10 cursor-pointer"
                                         onClick={handleLogout}

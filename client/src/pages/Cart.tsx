@@ -3,7 +3,7 @@ import { useAppContext } from "@/context/AppContext"
 import { useCallback, useEffect, useState } from "react"
 
 const Cart = () => {
-    const { products, currency, cartItem, removeFromCart, getCartCount, updateCartItem, getCartAmount, navigate } = useAppContext();
+    const { products, currency, cartItem, removeFromCart, getCartCount, addToCart, getCartAmount, navigate } = useAppContext();
     const [cartArr, setCartArr] = useState<ProductType[]>([]);
     const [address] = useState(dummyAddress);
     const [showAddress, setShowAddress] = useState(false);
@@ -29,8 +29,8 @@ const Cart = () => {
         if (products.length > 0 && cartItem) getCart();
     }, [products, cartItem, getCart])
     return (products.length > 0 && cartItem ?
-        <div className="flex flex-col md:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
-            <div className='flex-1 max-w-4xl'>
+        <div className="flex flex-col lg:flex-row py-16 max-w-6xl w-full px-6 mx-auto">
+            <div className='flex-1 max-w-4xl lg:mb-0 mb-10'>
                 <h1 className="text-3xl font-medium mb-6">
                     Shopping Cart <span className="text-sm text-primary">{getCartCount()} Items</span>
                 </h1>
@@ -51,18 +51,16 @@ const Cart = () => {
                             </div>
                             <div>
                                 <p className="hidden md:block font-semibold">{product.name}</p>
-                                <div className="font-normal text-gray-500/70">
+                                <div className="font-normal text-gray-500/70 flex flex-col gap-2">
                                     <p>Weight: <span>{product.weight || "N/A"}</span></p>
-                                    <div className='flex items-center'>
-                                        <p>Qty:</p>
-                                        <select
-                                            value={cartItem[product._id]}
-                                            onChange={(e) => updateCartItem(product._id, Number(e.target.value))}
-                                            className='outline-none'>
-                                            {Array(cartItem[product._id] > 9 ? cartItem[product._id] : 9).fill('').map((_, index) => (
-                                                <option key={index} value={index + 1}>{index + 1}</option>
-                                            ))}
-                                        </select>
+                                    <div className="flex items-center justify-center gap-2 md:w-20 w-16 h-[34px] bg-primary/10 rounded select-none">
+                                        <button onClick={() => removeFromCart(product._id)} className="cursor-pointer text-md px-2 h-full" >
+                                            -
+                                        </button>
+                                        <span className="w-5 text-center">{cartItem[product._id]}</span>
+                                        <button onClick={() => addToCart(product._id)} className="cursor-pointer text-md px-2 h-full" >
+                                            +
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -78,10 +76,9 @@ const Cart = () => {
                     <img src={assets.arrow_right_icon_colored} alt="Arrow" className="group-hover:-translate-x-1 transition" />
                     Continue Shopping
                 </button>
-
             </div>
 
-            <div className="max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">
+            <div className="lg:max-w-[360px] w-full bg-gray-100/40 p-5 max-md:mt-16 border border-gray-300/70">
                 <h2 className="text-xl md:text-xl font-medium">Order Summary</h2>
                 <hr className="border-gray-300 my-5" />
 
