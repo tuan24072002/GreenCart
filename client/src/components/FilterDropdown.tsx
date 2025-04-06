@@ -1,0 +1,148 @@
+import { useEffect, useMemo, useState } from 'react';
+import { dummyProducts } from '@/assets/assets';
+import { useAppContext } from '@/context/AppContext';
+import { cn } from '@/lib/utils';
+interface Props {
+    className?: string;
+    category?: string;
+}
+const FilterDropdown = ({ className, category }: Props) => {
+
+    const { setProducts, navigate } = useAppContext();
+    const [selectedCategory, setSelectedCategory] = useState('All');
+    const [priceRange, setPriceRange] = useState({ min: '', max: '' });
+    const [rating, setRating] = useState(0);
+
+    const categories = useMemo(
+        () => ['All', ...new Set(dummyProducts.map(product => product.category))],
+        []
+    );
+
+    useEffect(() => {
+        const filteredProducts = dummyProducts.filter(product => {
+            const minPrice = priceRange.min ? parseFloat(priceRange.min.replace(/\D/g, '')) : null;
+            const maxPrice = priceRange.max ? parseFloat(priceRange.max.replace(/\D/g, '')) : null;
+            if (minPrice && product.offerPrice < minPrice) return false;
+            if (maxPrice && product.offerPrice > maxPrice) return false;
+
+            if (rating > 0 && product.rating !== rating) return false;
+
+            return true;
+        });
+        setProducts(filteredProducts);
+    }, [rating, priceRange.max, priceRange.min, setProducts])
+    useEffect(() => {
+        if (category) {
+            setSelectedCategory(categories.find(cat => cat.toLowerCase() === category?.toLowerCase()) || 'All');
+        }
+    }, [category, categories])
+    const handlePriceChange = (e: React.ChangeEvent<HTMLInputElement>, type: 'min' | 'max') => {
+        let value = e.target.value;
+        value = value.replace(/\D/g, '');
+        if (type === 'min') setPriceRange({ ...priceRange, min: value });
+        if (type === 'max') setPriceRange({ ...priceRange, max: value });
+    };
+
+    const handlePriceBlur = (type: 'min' | 'max') => {
+        if (type === "min" && priceRange.min) {
+            const numberValue = parseInt(priceRange.min, 10);
+            if (!isNaN(numberValue)) {
+                setPriceRange({ ...priceRange, min: numberValue.toLocaleString() + " VNĐ" });
+            }
+        } else if (type === "max" && priceRange.max) {
+            const numberValue = parseInt(priceRange.max, 10);
+            if (!isNaN(numberValue)) {
+                setPriceRange({ ...priceRange, max: numberValue.toLocaleString() + " VNĐ" });
+            }
+        } else {
+            return;
+        }
+    };
+
+    const handlePriceFocus = (type: 'min' | 'max') => {
+        if (type === "min" && priceRange.min) {
+            const numericValue = priceRange.min.replace(/,/g, '').replace(/ VNĐ/g, '');
+            setPriceRange({ ...priceRange, min: numericValue });
+        } else if (type === "max" && priceRange.max) {
+            const numericValue = priceRange.max.replace(/,/g, '').replace(/ VNĐ/g, '');
+            setPriceRange({ ...priceRange, max: numericValue });
+        } else {
+            return;
+        }
+    };
+
+    return (
+        <div className={cn("", className)}>
+            <div className="w-full">
+                <label className="block text-sm font-medium text-primary mb-1">
+                    Category
+                </label>
+                <select
+                    value={selectedCategory}
+                    onChange={(e) => {
+                        if (e.target.value === "All") {
+                            navigate("/products");
+                        } else {
+                            navigate(`/products/${e.target.value.toLowerCase()}`);
+                        }
+                        setSelectedCategory(e.target.value)
+                    }}
+                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                >
+                    {categories.map((cat) => (
+                        <option key={cat} value={cat}>
+                            {cat}
+                        </option>
+                    ))}
+                </select>
+            </div>
+            <div className="w-full">
+                <label className="block text-sm font-medium text-primary mb-1">
+                    Rating
+                </label>
+                <select
+                    value={rating}
+                    onChange={(e) => setRating(Number(e.target.value))}
+                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                >
+                    <option value={0}>All</option>
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                </select>
+            </div>
+            <div className="w-full">
+                <label className="block text-sm font-medium text-primary mb-1">
+                    Min Price
+                </label>
+                <input
+                    type="text"
+                    value={priceRange.min}
+                    placeholder='VNĐ'
+                    onChange={(e) => handlePriceChange(e, 'min')}
+                    onBlur={() => handlePriceBlur('min')}
+                    onFocus={() => handlePriceFocus('min')}
+                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                />
+            </div>
+            <div className="w-full">
+                <label className="block text-sm font-medium text-primary mb-1">
+                    Max Price
+                </label>
+                <input
+                    type="text"
+                    value={priceRange.max}
+                    placeholder='VNĐ'
+                    onChange={(e) => handlePriceChange(e, 'max')}
+                    onBlur={() => handlePriceBlur('max')}
+                    onFocus={() => handlePriceFocus('max')}
+                    className="w-full p-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
+                />
+            </div>
+        </div>
+    );
+};
+
+export default FilterDropdown
