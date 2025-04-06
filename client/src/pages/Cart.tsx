@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from "react"
 const Cart = () => {
     const { products, currency, cartItem, removeFromCart, getCartCount, updateCartItem, getCartAmount, navigate } = useAppContext();
     const [cartArr, setCartArr] = useState<ProductType[]>([]);
-    const [address, setAddress] = useState(dummyAddress);
+    const [address] = useState(dummyAddress);
     const [showAddress, setShowAddress] = useState(false);
     const [selectedAddress, setSelectedAddress] = useState(dummyAddress[0]);
     const [paymentOption, setPaymentOption] = useState<"COD" | "Online">("COD");
@@ -67,7 +67,7 @@ const Cart = () => {
                                 </div>
                             </div>
                         </div>
-                        <p className="text-center">{Number(product.offerPrice * product.quantity).toLocaleString()}{currency}</p>
+                        <p className="text-center">{Number(product.offerPrice * (product.quantity || 1)).toLocaleString()}{currency}</p>
                         <button onClick={() => removeFromCart(product._id)} className="cursor-pointer mx-auto">
                             <img src={assets.remove_icon} alt="Remove" className="inline-block size-6" />
                         </button>
