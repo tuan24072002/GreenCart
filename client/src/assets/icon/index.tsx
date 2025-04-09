@@ -1,8 +1,12 @@
-export const Logo = ({ color }: { color: string }) => {
+export const Logo = ({ color, width = 132, height = 30 }: {
+    color: string,
+    width?: number
+    height?: number
+}) => {
     return (
         <svg
-            width="132"
-            height="30"
+            width={width}
+            height={height}
             viewBox="0 0 132 30"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"

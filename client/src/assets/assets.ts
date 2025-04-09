@@ -906,6 +906,16 @@ export const dummyOrders = [
         quantity: 1,
         _id: "67e258798f87e633667863f4",
       },
+      {
+        product: dummyProducts[2],
+        quantity: 1,
+        _id: "67e258798f87e633667863f5",
+      },
+      {
+        product: dummyProducts[3],
+        quantity: 1,
+        _id: "67e258798f87e633667863f6",
+      },
     ],
     amount: 43000,
     address: dummyAddress[0],

@@ -42,7 +42,7 @@ const Navbar = () => {
             <nav className="flex items-center justify-between px-6 md:px-16 lg:px-24 xl:px-32 py-4 border-b border-primary relative transition-all">
 
                 <NavLink to={"/"} onClick={() => setOpen(false)}>
-                    {<Logo color={theme === "light" ? "#2B3441" : "#fff"} />}
+                    <Logo color={theme === "light" ? "#2B3441" : "#fff"} />
                 </NavLink>
                 <div className="hidden sm:flex items-center text-text gap-8">
                     <NavLink to={"/"}>{t(`navbar.home`)}</NavLink>

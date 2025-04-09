@@ -20,52 +20,61 @@ const AddAddress = React.lazy(() => import("./pages/AddAddress"));
 const MyOrders = React.lazy(() => import("./pages/MyOrders"));
 const Contact = React.lazy(() => import("./pages/Contact"));
 const Settings = React.lazy(() => import("./pages/Settings"));
-
-const pageList = [
-  {
-    path: "/",
-    element: <Home />,
-  },
-  {
-    path: "/products",
-    element: <Products />,
-  },
-  {
-    path: "/products/:category",
-    element: <ProductCategory />,
-  },
-  {
-    path: "/products/:category/:id",
-    element: <ProductDetail />,
-  },
-  {
-    path: "/cart",
-    element: <Cart />,
-  },
-  {
-    path: "/add-address",
-    element: <AddAddress />,
-  },
-  {
-    path: "/my-orders",
-    element: <MyOrders />,
-  },
-  {
-    path: "/contact",
-    element: <Contact />
-  },
-  {
-    path: "/settings/*",
-    element: <Settings />
-  }
-];
-
+const SellerLogin = React.lazy(() => import("./pages/seller/SellerLogin"));
+const SellerLayout = React.lazy(() => import("./pages/seller/SellerLayout"));
+const AddProduct = React.lazy(() => import("./pages/seller/AddProduct"));
+const Orders = React.lazy(() => import("./pages/seller/Orders"));
+const ProductList = React.lazy(() => import("./pages/seller/ProductList"));
 const App = () => {
   const location = useLocation();
   const isSellerPath = useLocation().pathname.includes("seller");
-  const { showUserLogin } = useAppContext();
+  const { showUserLogin, isSeller } = useAppContext();
   const rootRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
+
+  const pageList = [
+    {
+      path: "/",
+      element: <Home />,
+    },
+    {
+      path: "/products",
+      element: <Products />,
+    },
+    {
+      path: "/products/:category",
+      element: <ProductCategory />,
+    },
+    {
+      path: "/products/:category/:id",
+      element: <ProductDetail />,
+    },
+    {
+      path: "/cart",
+      element: <Cart />,
+    },
+    {
+      path: "/add-address",
+      element: <AddAddress />,
+    },
+    {
+      path: "/my-orders",
+      element: <MyOrders />,
+    },
+    {
+      path: "/contact",
+      element: <Contact />
+    },
+    {
+      path: "/settings/*",
+      element: <Settings />
+    },
+    //Seller page
+    {
+      path: "/seller",
+      element: isSeller ? <SellerLayout /> : <SellerLogin />
+    }
+  ];
 
   use(initReactI18next).init({
     lng: localStorage.getItem('language') ?? 'vi',
@@ -86,7 +95,7 @@ const App = () => {
   useEffect(() => {
     window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
   }, [location.pathname]);
-  if (!isReady) {
+  if (isReady) {
     setTimeout(() => {
       setIsReady(true)
     }, 860)
@@ -102,13 +111,28 @@ const App = () => {
         {isSellerPath ? null : <Navbar />}
         <div className={cn(!isSellerPath && "px-6 md:px-16 lg:px-24 xl:px-32 flex-1")}>
           <Routes>
-            {pageList.map(({ path, element }) => (
-              <Route
-                key={path}
-                path={path}
-                element={element}
-              />
-            ))}
+            {pageList.map(({ path, element }) => {
+              if (path === "/seller") {
+                return (
+                  <Route
+                    key={path}
+                    path={path}
+                    element={element}
+                  >
+                    <Route index element={isSeller ? <AddProduct /> : null} />
+                    <Route path={"product-list"} element={isSeller ? <ProductList /> : null} />
+                    <Route path={"orders"} element={isSeller ? <Orders /> : null} />
+                  </Route>
+                )
+              }
+              return (
+                <Route
+                  key={path}
+                  path={path}
+                  element={element}
+                />
+              )
+            })}
           </Routes>
         </div>
         {isSellerPath ? null : <Footer />}

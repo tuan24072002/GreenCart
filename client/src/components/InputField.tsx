@@ -18,7 +18,7 @@ export const InputField = ({ name, id, type, placeholder, onChange, value, requi
             <Input
                 id={id}
                 name={name}
-                className="w-full px-2 py-5 border border-input rounded outline-none text-accent-foreground focus:border-primary transition md:text-lg"
+                className="w-full px-2 py-5 border border-input rounded outline-none text-accent-foreground focus:border-primary transition lg:text-lg"
                 type={type === "password" && showPass ? "text" : type}
                 placeholder={placeholder}
                 value={value}
