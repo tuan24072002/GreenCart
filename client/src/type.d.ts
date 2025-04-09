@@ -13,6 +13,10 @@ interface ProductType {
   inStock: boolean;
   rating: number;
 }
+interface ThemeContextType {
+  theme: string;
+  setTheme: (theme: "light" | "dark") => void;
+}
 interface AppContextType {
   navigate: ReturnType<typeof useNavigate>;
   user: any;

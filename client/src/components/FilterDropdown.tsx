@@ -2,12 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 import { dummyProducts } from '@/assets/assets';
 import { useAppContext } from '@/context/AppContext';
 import { cn } from '@/lib/utils';
+import { useTranslation } from 'react-i18next';
 interface Props {
     className?: string;
     category?: string;
 }
 const FilterDropdown = ({ className, category }: Props) => {
-
+    const { t } = useTranslation();
     const { setProducts, navigate } = useAppContext();
     const [selectedCategory, setSelectedCategory] = useState('All');
     const [priceRange, setPriceRange] = useState({ min: '', max: '' });
@@ -75,7 +76,7 @@ const FilterDropdown = ({ className, category }: Props) => {
         <div className={cn("", className)}>
             <div className="w-full">
                 <label className="block text-sm font-medium text-primary mb-1">
-                    Category
+                    {t(`products.filter.category`)}
                 </label>
                 <select
                     value={selectedCategory}
@@ -91,21 +92,21 @@ const FilterDropdown = ({ className, category }: Props) => {
                 >
                     {categories.map((cat) => (
                         <option key={cat} value={cat}>
-                            {cat}
+                            {t(`products.category.${cat.toLowerCase()}`)}
                         </option>
                     ))}
                 </select>
             </div>
             <div className="w-full">
                 <label className="block text-sm font-medium text-primary mb-1">
-                    Rating
+                    {t(`products.filter.rating`)}
                 </label>
                 <select
                     value={rating}
                     onChange={(e) => setRating(Number(e.target.value))}
                     className="w-full p-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-primary focus:border-primary"
                 >
-                    <option value={0}>All</option>
+                    <option value={0}>{t(`products.all`)}</option>
                     <option value={1}>1</option>
                     <option value={2}>2</option>
                     <option value={3}>3</option>
@@ -115,7 +116,7 @@ const FilterDropdown = ({ className, category }: Props) => {
             </div>
             <div className="w-full">
                 <label className="block text-sm font-medium text-primary mb-1">
-                    Min Price
+                    {t(`products.filter.min`)}
                 </label>
                 <input
                     type="text"
@@ -129,7 +130,7 @@ const FilterDropdown = ({ className, category }: Props) => {
             </div>
             <div className="w-full">
                 <label className="block text-sm font-medium text-primary mb-1">
-                    Max Price
+                    {t(`products.filter.max`)}
                 </label>
                 <input
                     type="text"

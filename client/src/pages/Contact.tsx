@@ -1,13 +1,15 @@
 import { cn } from "@/lib/utils"
 import { Facebook, Github, Instagram, Mail, MapPin, Phone, Send, Twitter } from "lucide-react"
+import { useTranslation } from "react-i18next"
 
 const Contact = () => {
+    const { t } = useTranslation();
     const handleSubmit = () => { }
     return (
         <div className="mt-16">
             <div className="flex flex-col items-center justify-center w-max mx-auto mb-8">
                 <p className={cn("text-2xl md:text-3xl font-medium uppercase")}>
-                    Contact
+                    {t(`contact.title`)}
                 </p>
                 <div className="w-16 h-0.5 bg-primary rounded-full" />
             </div>
@@ -15,9 +17,9 @@ const Contact = () => {
                 <div className="grid md:grid-cols-5 gap-10">
                     <div className="md:col-span-2 space-y-8">
                         <div className="space-y-6">
-                            <h3 className="text-xl font-semibold font-display">Contact Information</h3>
+                            <h3 className="text-xl font-semibold font-display"> {t(`contact.info`)}</h3>
                             <p className="text-muted-foreground">
-                                Fill out the form or contact me directly using the information below.
+                                {t(`contact.desc`)}
                             </p>
                         </div>
 
@@ -27,7 +29,7 @@ const Contact = () => {
                                     <Mail className="h-5 w-5" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground text-gray-500">Email</p>
+                                    <p className="text-sm text-muted-foreground">Email</p>
                                     <a href="mailto:0995086534ts@gmail.com" className="font-medium text-gray-700">0995086534ts@gmail.com</a>
                                 </div>
                             </div>
@@ -37,7 +39,7 @@ const Contact = () => {
                                     <Phone className="h-5 w-5" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground text-gray-500">Phone</p>
+                                    <p className="text-sm text-muted-foreground"> {t(`contact.phone`)}</p>
                                     <a href="tel:+11234567890" className="font-medium text-gray-700">+84 587 928 264</a>
                                 </div>
                             </div>
@@ -47,7 +49,7 @@ const Contact = () => {
                                     <MapPin className="h-5 w-5" />
                                 </div>
                                 <div>
-                                    <p className="text-sm text-muted-foreground text-gray-500">Location</p>
+                                    <p className="text-sm text-muted-foreground"> {t(`contact.address`)}</p>
                                     <a href="https://www.google.com/maps/place/Qu%E1%BA%ADn+4,+H%E1%BB%93+Ch%C3%AD+Minh" target="_blank" className="font-medium text-gray-700">District 4, HCMC</a>
                                 </div>
                             </div>
@@ -99,7 +101,7 @@ const Contact = () => {
                             <div className="grid gap-6">
                                 <div className="grid sm:grid-cols-2 gap-6">
                                     <div className="space-y-2">
-                                        <label htmlFor="name">Your Name</label>
+                                        <label htmlFor="name">{t(`contact.form.name`)}</label>
                                         <input
                                             id="name"
                                             name="name"
@@ -112,7 +114,7 @@ const Contact = () => {
                                     </div>
 
                                     <div className="space-y-2">
-                                        <label htmlFor="email">Your Email</label>
+                                        <label htmlFor="email">{t(`contact.form.email`)}</label>
                                         <input
                                             id="email"
                                             name="email"
@@ -127,7 +129,7 @@ const Contact = () => {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label htmlFor="subject">Subject</label>
+                                    <label htmlFor="subject">{t(`contact.form.subject`)}</label>
                                     <input
                                         id="subject"
                                         name="subject"
@@ -140,7 +142,7 @@ const Contact = () => {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label htmlFor="message">Message</label>
+                                    <label htmlFor="message">{t(`contact.form.message`)}</label>
                                     <textarea
                                         id="message"
                                         name="message"
@@ -158,7 +160,7 @@ const Contact = () => {
                                 >
                                     <span className="flex items-center gap-2 text-white">
                                         <Send className="h-4 w-4" />
-                                        Send Message
+                                        {t(`contact.form.button`)}
                                     </span>
                                 </button>
                             </div>

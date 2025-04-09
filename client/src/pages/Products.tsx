@@ -3,8 +3,10 @@ import ProductCard from "@/components/ProductCard";
 import Title from "@/components/Title";
 import { useAppContext } from "@/context/AppContext"
 import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 const Products = () => {
+    const { t } = useTranslation();
     const { products, searchQuery } = useAppContext();
     const [filteredProducts, setFilteredProducts] = useState<ProductType[] | []>([]);
     useEffect(() => {
@@ -22,7 +24,7 @@ const Products = () => {
     return (
         <Title
             showBreadcrumb
-            title="All Products"
+            title={t("products.title")}
             highlight>
             <div className="flex flex-col lg:flex-row gap-6">
                 <FilterDropdown className="lg:w-1/6 w-full mt-6 grid lg:grid-cols-1 md:grid-cols-4 grid-cols-2 h-fit gap-6 md:gap-3" />

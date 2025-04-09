@@ -1,0 +1,152 @@
+{
+    "navbar": {
+        "topBanner": "Ưu đãi đặc biệt: Miễn phí vận chuyển cho đơn hàng trên 50.000vnđ! | GIẢM GIÁ 20% cho lần mua đầu tiên",
+        "home": "Trang Chủ",
+        "products": "Sản Phẩm",
+        "contact": "Liên Hệ",
+        "myOrders": "Đơn Hàng Của Tôi",
+        "settings": "Cài Đặt",
+        "logout": "Đăng Xuất",
+        "login": "Đăng nhập",
+        "hello": "Xin chào",
+        "placeholderSearch": "Tìm kiếm..."
+    },
+    "footer": {
+        "slogan": "Chúng tôi giao thực phẩm tươi và đồ ăn vặt đến tận cửa nhà bạn. Được hàng ngàn người tin dùng, chúng tôi hướng đến việc mang lại trải nghiệm mua sắm đơn giản và tiết kiệm.",
+        "Quick Links": {
+            "title": "Liên Kết Nhanh",
+            "Home": "Trang Chủ",
+            "Products": "Sản Phẩm",
+            "Contact Us": "Liên Hệ"
+        },
+        "Need help?": {
+            "title": "Cần hỗ trợ?",
+            "Delivery Information": "Thông Tin Giao Hàng",
+            "Return & Refund Policy": "Chính Sách Đổi Trả & Hoàn Tiền",
+            "Payment Methods": "Phương Thức Thanh Toán",
+            "Track your Order": "Theo Dõi Đơn Hàng",
+            "Contact Us": "Liên Hệ Chúng Tôi"
+        },
+        "Follow Us": {
+            "title": "Theo dõi chúng tôi",
+            "Instagram": "Instagram",
+            "Twitter": "Twitter",
+            "Facebook": "Facebook",
+            "YouTube": "YouTube"
+        }
+    },
+    "home": {
+        "slogan": "Sự tươi ngon bạn có thể tin tưởng, tiết kiệm bạn sẽ yêu thích!",
+        "shopNow": "Mua ngay",
+        "exploreDeal": "Khám phá các ưu đãi",
+        "bestSeller": "Bán chạy nhất",
+        "why": {
+            "title": "Lý do chúng tôi là tốt nhất?",
+            "rs1": {
+                "title": "Giao hàng siêu tốc",
+                "desc": "Giao hàng tạp hóa trong chưa đầy 30 phút."
+            },
+            "rs2": {
+                "title": "Đảm bảo độ tươi",
+                "desc": "Nông sản tươi ngon từ nơi sản xuất."
+            },
+            "rs3": {
+                "title": "Giá cả phải chăng",
+                "desc": "Hàng tạp hóa chất lượng với giá không thể tốt hơn."
+            },
+            "rs4": {
+                "title": "Ngàn người tin tưởng",
+                "desc": "Được hơn 10.000 khách hàng yêu thích."
+            }
+        },
+        "missDeal": {
+            "title": "Đừng bỏ lỡ ưu đãi!",
+            "desc": "Đăng ký để nhận các khuyến mãi mới nhất, sản phẩm mới và ưu đãi độc quyền",
+            "form": {
+                "placeholder": "Nhập email của bạn",
+                "button": "Gửi"
+            }
+        }
+    },
+    "category": {
+        "title": "Danh mục",
+        "organicVeggies": "Rau hữu cơ",
+        "freshFruits": "Trái cây tươi",
+        "coldDrinks": "Đồ uống lạnh",
+        "instantFood": "Thực phẩm ăn liền",
+        "dairyProducts": "Sản phẩm từ sữa",
+        "bakeryBreads": "Bánh mì & bánh ngọt",
+        "grainsCereals": "Ngũ cốc & các loại hạt"
+    },
+    "products": {
+        "title": "Tất cả sản phẩm",
+        "home": "Trang Chủ",
+        "filter": {
+            "category": "Danh mục",
+            "rating": "Đánh giá",
+            "min": "Giá tối thiểu",
+            "max": "Giá tối đa"
+        },
+        "all": "Tất cả",
+        "category": {
+            "all": "Tất cả",
+            "vegetables": "Rau củ",
+            "fruits": "Trái cây",
+            "dairy": "Sữa",
+            "drinks": "Đồ uống",
+            "grains": "Ngũ cốc",
+            "bakery": "Bánh mì",
+            "instant": "Đồ ăn liền"
+        }
+    },
+    "productDetail": {
+        "taxes": "(Bao gồm thuế)",
+        "about": "Về sản phẩm",
+        "addToCart": "Thêm vào giỏ hàng",
+        "buyNow": "Mua ngay",
+        "related": "Sản phẩm liên quan"
+    },
+    "contact": {
+        "title": "Liên hệ",
+        "info": "Thông tin liên hệ",
+        "desc": "Điền vào mẫu hoặc liên hệ trực tiếp với tôi theo thông tin bên dưới.",
+        "phone": "Số điện thoại",
+        "address": "Địa chỉ",
+        "form": {
+            "name": "Tên của bạn",
+            "email": "Email",
+            "subject": "Tiêu đề",
+            "message": "Nội dung",
+            "button": "Gửi"
+        }
+    },
+    "cart": {
+        "title": "Giỏ hàng",
+        "items": "sản phẩm",
+        "details": "Chi tiết sản phẩm",
+        "subtotal": "Tổng cộng",
+        "action": "Hành động",
+        "weight": "Trọng lượng",
+        "continueShopping": "Tiếp tục mua hàng",
+        "summary": "Chi tiết đơn hàng",
+        "address": "Địa chỉ giao hàng",
+        "change": "Thay đổi",
+        "buttonAddress": "Thêm địa chỉ",
+        "payment": {
+            "title": "Phương thức thanh toán",
+            "cash": {
+                "title": "Thanh toán khi nhận hàng",
+                "button": "Đặt hàng"
+            },
+            "online": {
+                "title": "Thanh toán trực tuyến",
+                "button": "Tiến hành thanh toán"
+            }
+        },
+        "price": "Giá",
+        "ship": "Phí vận chuyển",
+        "free": "Miễn phí",
+        "tax": "Thuế",
+        "total": "Tổng tiền"
+    }
+}

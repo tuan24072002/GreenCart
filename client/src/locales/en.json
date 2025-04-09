@@ -1,0 +1,152 @@
+{
+    "navbar": {
+        "topBanner": "Special Deal: Free Shipping on Orders Above 50,000vnđ! | 20% OFF on First Purchase",
+        "home": "Home",
+        "products": "Products",
+        "contact": "Contact",
+        "myOrders": "My Orders",
+        "settings": "Settings",
+        "logout": "Logout",
+        "login": "Login",
+        "hello": "Hello",
+        "placeholderSearch": "Search..."
+    },
+    "footer": {
+        "slogan": "We deliver fresh groceries and snacks straight to your door. Trusted by thousands, we aim to make your shopping experience simple and affordable.",
+        "Quick Links": {
+            "title": "Quick Links",
+            "home": "Trang Chủ",
+            "products": "Sản Phẩm",
+            "contact": "Liên Hệ"
+        },
+        "Need help?": {
+            "title": "Need help?",
+            "Delivery Information": "Delivery Information",
+            "Return & Refund Policy": "Return & Refund Policy",
+            "Payment Methods": "Payment Methods",
+            "Track your Order": "Track your Order",
+            "Contact Us": "Contact Us"
+        },
+        "Follow Us": {
+            "title": "Follow Us",
+            "Instagram": "Instagram",
+            "Twitter": "Twitter",
+            "Facebook": "Facebook",
+            "YouTube": "YouTube"
+        }
+    },
+    "home": {
+        "slogan": "Freshes You Can Trust, Savings You Will Love!",
+        "shopNow": "Shop now",
+        "exploreDeal": "Explore deals",
+        "bestSeller": "Best seller",
+        "why": {
+            "title": "Why We Are The Best?",
+            "rs1": {
+                "title": "Fastest Delivery",
+                "desc": "Groceries delivered in under 30 minutes."
+            },
+            "rs2": {
+                "title": "Freshness Guaranteed",
+                "desc": "Fresh produce straight from the source."
+            },
+            "rs3": {
+                "title": "Affordable Prices",
+                "desc": "Quality groceries at unbeatable prices."
+            },
+            "rs4": {
+                "title": "Trusted by Thousands",
+                "desc": "Loved by 10,000+ happy customers."
+            }
+        },
+        "missDeal": {
+            "title": "Never Miss a Deal!",
+            "desc": "Subscribe to get the latest offers, new arrivals, and exclusive discounts",
+            "form": {
+                "placeholder": "Enter your email",
+                "button": "Send"
+            }
+        }
+    },
+    "category": {
+        "title": "Categories",
+        "organicVeggies": "Organic veggies",
+        "freshFruits": "Fresh Fruits",
+        "coldDrinks": "Cold Drinks",
+        "instantFood": "Instant Food",
+        "dairyProducts": "Dairy Products",
+        "bakeryBreads": "Bakery & Breads",
+        "grainsCereals": "Grains & Cereals"
+    },
+    "products": {
+        "title": "All Products",
+        "home": "Home",
+        "filter": {
+            "category": "Category",
+            "rating": "Rating",
+            "min": "Min Price",
+            "max": "Max Price"
+        },
+        "all": "All",
+        "category": {
+            "all": "All",
+            "vegetables": "Vegetables",
+            "fruits": "Fruits",
+            "dairy": "Dairy",
+            "drinks": "Drinks",
+            "grains": "Grains",
+            "bakery": "Bakery",
+            "instant": "Instant Food"
+        }
+    },
+    "productDetail": {
+        "taxes": "(inclusive of all taxes)",
+        "about": "About Product",
+        "addToCart": "Add to Cart",
+        "buyNow": "Buy Now",
+        "related": "Related Products"
+    },
+    "contact": {
+        "title": "Contact",
+        "info": "Contact Information",
+        "desc": "Fill out the form or contact me directly using the information below.",
+        "phone": "Phone Number",
+        "address": "Address",
+        "form": {
+            "name": "Your Name",
+            "email": "Email",
+            "subject": "Subject",
+            "message": "Message",
+            "button": "Send"
+        }
+    },
+    "cart": {
+        "title": "Shopping Cart",
+        "items": "items",
+        "details": "Product Details",
+        "subtotal": "Subtotal",
+        "action": "Action",
+        "weight": "Weight",
+        "continueShopping": "Continue Shopping",
+        "summary": "Order Summary",
+        "address": "Shipping Address",
+        "change": "Change",
+        "buttonAddress": "Add address",
+        "payment": {
+            "title": "Payment Method",
+            "cash": {
+                "title": "Cash on Delivery",
+                "button": "Place Order"
+            },
+            "online": {
+                "title": "Online Payment",
+                "button": "Proceed to Payment"
+            }
+        },
+        "price": "Price",
+        "ship": "Shipping Fee",
+        "free": "Free",
+        "tax": "Tax",
+        "total": "Total Amount"
+    }
+}

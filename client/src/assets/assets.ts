@@ -1,3 +1,4 @@
+import logo_dark from "./logo_dark.svg";
 import logo from "./logo.svg";
 import search_icon from "./search_icon.svg";
 import remove_icon from "./remove_icon.svg";
@@ -71,7 +72,11 @@ import quinoa_image from "./quinoa_image.png";
 import brown_rice_image from "./brown_rice_image.png";
 import barley_image from "./barley_image.png";
 import empty_box from "./empty_box_1.svg";
+import vnFlag from "./vietnam.png";
+import ukFlag from "./unitedkingdom.png";
+
 export const assets = {
+  logo_dark,
   logo,
   search_icon,
   remove_icon,
@@ -101,47 +106,49 @@ export const assets = {
   add_address_iamge,
   box_icon,
   empty_box,
+  vnFlag,
+  ukFlag,
 };
 
 export const categories = [
   {
-    text: "Organic veggies",
+    text: `organicVeggies`,
     path: "Vegetables",
     image: organic_vegitable_image,
     bgColor: "#FEF6DA",
   },
   {
-    text: "Fresh Fruits",
+    text: `freshFruits`,
     path: "Fruits",
     image: fresh_fruits_image,
     bgColor: "#FEE0E0",
   },
   {
-    text: "Cold Drinks",
+    text: `coldDrinks`,
     path: "Drinks",
     image: bottles_image,
     bgColor: "#F0F5DE",
   },
   {
-    text: "Instant Food",
+    text: `instantFood`,
     path: "Instant",
     image: maggi_image,
     bgColor: "#E1F5EC",
   },
   {
-    text: "Dairy Products",
+    text: `dairyProducts`,
     path: "Dairy",
     image: dairy_product_image,
     bgColor: "#FEE6CD",
   },
   {
-    text: "Bakery & Breads",
+    text: `bakeryBreads`,
     path: "Bakery",
     image: bakery_image,
     bgColor: "#E0F6FE",
   },
   {
-    text: "Grains & Cereals",
+    text: `grainsCereals`,
     path: "Grains",
     image: grain_image,
     bgColor: "#F1E3F9",
@@ -152,11 +159,9 @@ export const footerLinks = [
   {
     title: "Quick Links",
     links: [
-      { text: "Home", url: "#" },
-      { text: "Best Sellers", url: "#" },
-      { text: "Offers & Deals", url: "#" },
-      { text: "Contact Us", url: "#" },
-      { text: "FAQs", url: "#" },
+      { text: "Home", url: "/" },
+      { text: "Products", url: "/products" },
+      { text: "Contact Us", url: "/contact" },
     ],
   },
   {

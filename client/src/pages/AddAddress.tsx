@@ -1,27 +1,8 @@
 import { assets } from "@/assets/assets"
+import { InputField } from "@/components/InputField";
 import { FormEvent, useState } from "react"
 
-interface InputProps {
-    id?: string,
-    name?: string,
-    type: string,
-    placeholder?: string,
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void,
-    value: any
-    required?: boolean
-}
-const InputField = ({ name, id, type, placeholder, onChange, value, required }: InputProps) => (
-    <input
-        id={id}
-        name={name}
-        className="w-full px-2 py-2.5 border border-gray-500/30 rounded outline-none text-gray-500 focus:border-primary transition"
-        type={type}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        required={required}
-    />
-)
+
 const AddAddress = () => {
     const [address, setAddress] = useState<AddressProps>({
         _id: '',
@@ -45,7 +26,7 @@ const AddAddress = () => {
     }
     return (
         <div className="mt-16 pb-16 max-w-5xl mx-auto">
-            <p className="text-2xl md:text-3xl text-gray-500">Add Shipping <span className="text-primary font-semibold">Address</span></p>
+            <p className="text-2xl md:text-3xl text-accent-foreground">Add Shipping <span className="text-primary font-semibold">Address</span></p>
             <div className="flex flex-col-reverse md:flex-row mt-10 justify-between">
                 <div className="flex-1 md:max-w-md">
                     <form onSubmit={handleSubmit} className="space-y-3 mt-6 text-sm">

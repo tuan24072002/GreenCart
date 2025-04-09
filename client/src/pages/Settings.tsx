@@ -1,3 +1,6 @@
+import ChangePassword from "@/components/Settings/ChangePassword";
+import General from "@/components/Settings/General";
+import Language from "@/components/Settings/Language";
 import { Languages, LayoutDashboard, LockKeyhole } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -22,7 +25,7 @@ const Settings = () => {
                     <Link to={item.path} key={index}
                         className={`flex items-center py-3 px-4 gap-3 
                             ${location.pathname === item.path ? "border-r-4 md:border-r-[6px] bg-primary/10 border-primary text-primary"
-                                : "hover:bg-gray-100/90 border-white text-gray-700"
+                                : "hover:bg-accent border-white text-accent-foreground"
                             }`
                         }
                     >
@@ -34,11 +37,11 @@ const Settings = () => {
             <div className="flex-1">
                 {
                     module === "language" ? (
-                        <p>Language Settings</p>
+                        <Language />
                     ) : module === "change-password" ? (
-                        <p>Change Password</p>
+                        <ChangePassword />
                     ) : (
-                        <p>General Settings</p>
+                        <General />
                     )
                 }
             </div>
