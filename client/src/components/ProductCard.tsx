@@ -25,7 +25,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
                     ))}
                     <p>({product.rating})</p>
                 </div>
-                <div className="flex flex-col mt-3">
+                <div className="flex flex-col gap-2 mt-3">
                     <p className="text-base font-medium text-primary">
                         {includeTax(product.offerPrice)}{currency}{" "}<span className="text-muted-foreground md:text-sm text-xs line-through">{includeTax(product.price)}{currency}</span>
                     </p>
