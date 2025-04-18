@@ -1,12 +1,15 @@
+import { useThemeContext } from "@/context/ThemeContext";
 import { cn } from "@/lib/utils"
 import { Facebook, Github, Instagram, Mail, MapPin, Phone, Send, Twitter } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { Tooltip } from "react-tooltip";
 
 const Contact = () => {
     const { t } = useTranslation();
+    const { theme } = useThemeContext();
     const handleSubmit = () => { }
     return (
-        <div className="mt-16">
+        <div className="mt-16 pb-24">
             <div className="flex flex-col items-center justify-center w-max mx-auto mb-8">
                 <p className={cn("text-2xl md:text-3xl font-medium uppercase")}>
                     {t(`contact.title`)}
@@ -61,35 +64,61 @@ const Contact = () => {
                         <div className="flex gap-4">
                             <a
                                 href="#"
+                                data-tooltip-id={"Twitter"}
                                 className="w-10 h-10 rounded-full flex items-center justify-center bg-foreground/5 hover:bg-foreground/10 transition-colors group"
                                 aria-label="Twitter"
                             >
                                 <Twitter className="fill-black group-hover:fill-primary group-hover:text-primary" />
                             </a>
+                            <Tooltip
+                                id={"Twitter"}
+                                place="bottom"
+                                variant={theme === "dark" ? "light" : "dark"}
+                                content={"Twitter"}
+                            />
 
                             <a
                                 href="#"
+                                data-tooltip-id={"Facebook"}
                                 className="w-10 h-10 rounded-full flex items-center justify-center bg-foreground/5 hover:bg-foreground/10 transition-colors group"
-                                aria-label="LinkedIn"
+                                aria-label="Facebook"
                             >
                                 <Facebook className="fill-black group-hover:fill-primary group-hover:text-primary" />
                             </a>
-
+                            <Tooltip
+                                id={"Facebook"}
+                                place="bottom"
+                                variant={theme === "dark" ? "light" : "dark"}
+                                content={"Facebook"}
+                            />
                             <a
                                 href="#"
-                                className="w-10 h-10 rounded-full flex items-center justify-center bg-foreground/5 hover:bg-foreground/10 transition-colors group"
-                                aria-label="GitHub"
-                            >
-                                <Instagram className="group-hover:text-primary" />
-                            </a>
-
-                            <a
-                                href="#"
+                                data-tooltip-id={"Instagram"}
                                 className="w-10 h-10 rounded-full flex items-center justify-center bg-foreground/5 hover:bg-foreground/10 transition-colors group"
                                 aria-label="Instagram"
                             >
+                                <Instagram className="group-hover:text-primary" />
+                            </a>
+                            <Tooltip
+                                id={"Instagram"}
+                                place="bottom"
+                                variant={theme === "dark" ? "light" : "dark"}
+                                content={"Instagram"}
+                            />
+                            <a
+                                href="#"
+                                data-tooltip-id={"Github"}
+                                className="w-10 h-10 rounded-full flex items-center justify-center bg-foreground/5 hover:bg-foreground/10 transition-colors group"
+                                aria-label="Github"
+                            >
                                 <Github className="group-hover:text-primary" />
                             </a>
+                            <Tooltip
+                                id={"Github"}
+                                place="bottom"
+                                variant={theme === "dark" ? "light" : "dark"}
+                                content={"Github"}
+                            />
                         </div>
                     </div>
 

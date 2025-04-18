@@ -3,13 +3,15 @@ import Navbar from "./components/Navbar";
 import { cn } from "./lib/utils";
 import { Toaster } from "react-hot-toast";
 import Footer from "./components/Footer";
-import { useAppContext } from "./context/AppContext";
 import Login from "./components/Login";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import LoadingPage from "./components/LoadingPage";
 import i18next, { use } from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import { getLanguageData } from "./utils/languages";
+import { HttpService } from "./services/http/HttpService";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { setLanguage } from "./slice/app/App.slice";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Products = React.lazy(() => import("./pages/Products"));
@@ -20,15 +22,19 @@ const AddAddress = React.lazy(() => import("./pages/AddAddress"));
 const MyOrders = React.lazy(() => import("./pages/MyOrders"));
 const Contact = React.lazy(() => import("./pages/Contact"));
 const Settings = React.lazy(() => import("./pages/Settings"));
-const SellerLogin = React.lazy(() => import("./pages/seller/SellerLogin"));
 const SellerLayout = React.lazy(() => import("./pages/seller/SellerLayout"));
+const Dashboard = React.lazy(() => import("./pages/seller/Dashboard"));
 const AddProduct = React.lazy(() => import("./pages/seller/AddProduct"));
 const Orders = React.lazy(() => import("./pages/seller/Orders"));
 const ProductList = React.lazy(() => import("./pages/seller/ProductList"));
+const ResultPayment = React.lazy(() => import("./components/payment/ResultPayment"));
+
 const App = () => {
+  const dispatch = useAppDispatch();
   const location = useLocation();
-  const isSellerPath = useLocation().pathname.includes("seller");
-  const { showUserLogin, isSeller } = useAppContext();
+  const clearLayout = ["redirectUrl", "seller"].includes(location.pathname.split("/")[1]);
+  const appState = useAppSelector(state => state.app);
+  const signinState = useAppSelector(state => state.signin);
   const rootRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
 
@@ -72,8 +78,13 @@ const App = () => {
     //Seller page
     {
       path: "/seller",
-      element: isSeller ? <SellerLayout /> : <SellerLogin />
-    }
+      element: <SellerLayout />
+    },
+    //Payment result
+    {
+      path: "/redirectUrl",
+      element: <ResultPayment />
+    },
   ];
 
   use(initReactI18next).init({
@@ -88,10 +99,10 @@ const App = () => {
     }
   })
   i18next.on("languageChanged", (lang_code: string) => {
-    // dispatch(setLanguage(lang_code));
+    dispatch(setLanguage(lang_code));
     localStorage.setItem('language', lang_code);
   });
-
+  HttpService.initialize();
   useEffect(() => {
     window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
   }, [location.pathname]);
@@ -108,8 +119,8 @@ const App = () => {
   return (
     <Suspense fallback={<LoadingPage />}>
       <div className="flex flex-col min-h-screen relative bg-background transition-all duration-300" ref={rootRef}>
-        {isSellerPath ? null : <Navbar />}
-        <div className={cn(!isSellerPath && "px-6 md:px-16 lg:px-24 xl:px-32 flex-1")}>
+        {clearLayout ? null : <Navbar />}
+        <div className={cn(!clearLayout && "px-6 md:px-16 lg:px-24 xl:px-32 flex-1")}>
           <Routes>
             {pageList.map(({ path, element }) => {
               if (path === "/seller") {
@@ -119,9 +130,10 @@ const App = () => {
                     path={path}
                     element={element}
                   >
-                    <Route index element={isSeller ? <AddProduct /> : null} />
-                    <Route path={"product-list"} element={isSeller ? <ProductList /> : null} />
-                    <Route path={"orders"} element={isSeller ? <Orders /> : null} />
+                    <Route index element={appState.user?.isSeller ? <Dashboard /> : null} />
+                    <Route path={"add-product"} element={appState.user?.isSeller ? <AddProduct /> : null} />
+                    <Route path={"product-list"} element={appState.user?.isSeller ? <ProductList /> : null} />
+                    <Route path={"orders"} element={appState.user?.isSeller ? <Orders /> : null} />
                   </Route>
                 )
               }
@@ -135,8 +147,8 @@ const App = () => {
             })}
           </Routes>
         </div>
-        {isSellerPath ? null : <Footer />}
-        {showUserLogin && <Login />}
+        {clearLayout ? null : <Footer />}
+        {signinState.showUserLogin && <Login />}
         <Toaster />
       </div>
     </Suspense>

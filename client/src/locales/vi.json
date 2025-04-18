@@ -148,5 +148,128 @@
         "free": "Miễn phí",
         "tax": "Thuế",
         "total": "Tổng tiền"
+    },
+    "myOrders": {
+        "title": "Đơn hàng của tôi",
+        "orderId": "Mã đơn hàng",
+        "paymentType": "Cách thức thanh toán",
+        "payment": "Thanh toán",
+        "total": "Tổng tiền",
+        "category": "Danh mục",
+        "quantity": "Số lượng",
+        "status": "Trạng thái",
+        "Order Placed": "Đã đặt hàng",
+        "date": "Ngày",
+        "amount": "Tổng tiền",
+        "paid": "Đã thanh toán",
+        "pending": "Chưa thanh toán"
+    },
+    "orderDetail": {
+        "title": "Chi tiết đơn hàng",
+        "paid": "Đã thanh toán",
+        "pending": "Chưa thanh toán",
+        "createdAt": "Ngày tạo",
+        "orderId": "Mã đơn hàng",
+        "paymentType": "Phương thức thanh toán",
+        "orderItems": "Sản phẩm đã đặt",
+        "category": "Danh mục",
+        "quantity": "Số lượng",
+        "delivery": "Giao hàng",
+        "name": "Họ tên",
+        "phone": "Số điện thoại",
+        "address": "Địa chỉ",
+        "orderSummary": "Tóm tắt đơn hàng",
+        "subtotal": "Tạm tính",
+        "deliveryFee": "Phí giao hàng",
+        "free": "Miễn phí",
+        "tax": "Thuế",
+        "total": "Tổng cộng",
+        "buyThisAgain": "Mua lại",
+        "payNow": "Thanh toán ngay",
+        "close": "Đóng"
+    },
+    "addAddress": {
+        "title1": "Thêm địa chỉ",
+        "title2": "giao hàng",
+        "firstName": "Họ",
+        "lastName": "Tên",
+        "email": "Email",
+        "street": "Số nhà, tên đường",
+        "ward": "Chọn phường/xã",
+        "district": "Chọn quận/huyện",
+        "city": "Chọn tỉnh/thành phố",
+        "phone": "Số điện thoại",
+        "button": "Lưu địa chỉ"
+    },
+    "settings": {
+        "General": {
+            "title": "Chung",
+            "changeName": "Thay đổi họ tên",
+            "toggleTheme": "Chuyển đổi giao diện",
+            "light": "Sáng",
+            "dark": "Tối"
+        },
+        "Language": {
+            "title": "Ngôn ngữ"
+        },
+        "Change Password": {
+            "title": "Đổi mật khẩu",
+            "currentPass": "Mật khẩu hiện tại",
+            "newPass": "Mật khẩu mới",
+            "confirmPass": "Xác nhận mật khẩu",
+            "button": "Đổi mật khẩu"
+        }
+    },
+    "checkoutOnline": {
+        "title": "Chọn phương thức thanh toán",
+        "Momo": {
+            "title": "Momo",
+            "desc": "Thanh toán an toàn và nhanh chóng với ví Momo"
+        },
+        "ZaloPay": {
+            "title": "ZaloPay",
+            "desc": "Thanh toán dễ dàng với ZaloPay"
+        },
+        "VNPay": {
+            "title": "VNPay",
+            "desc": "Cổng thanh toán VNPay - Thanh toán mọi lúc, mọi nơi"
+        },
+        "button": "Tiếp tục thanh toán"
+    },
+    "redirectPayment": {
+        "success": {
+            "back": "Quay lại trang chủ",
+            "title": "Thanh toán thành công!",
+            "thanks": "Cảm ơn bạn đã đặt hàng tại",
+            "orderId": "Mã đơn hàng",
+            "total": "Tổng thanh toán",
+            "paymentMethod": "Phương thức thanh toán",
+            "title1": "Đang chuẩn bị đơn hàng",
+            "desc1": "Đơn hàng của bạn đang được chuẩn bị và sẽ được giao trong thời gian sớm nhất",
+            "title2": "Thời gian giao hàng dự kiến",
+            "desc2": "Đơn hàng sẽ được giao trong vòng 2 giờ tới",
+            "followOrder": "Theo dõi đơn hàng",
+            "continue": "Tiếp tục mua sắm"
+        },
+        "failed": {
+            "back": "Quay lại trang chủ",
+            "title": "Thanh toán không thành công!",
+            "sorry": "Rất tiếc, đã có lỗi xảy ra trong quá trình thanh toán",
+            "orderId": "Mã đơn hàng",
+            "total": "Tổng thanh toán",
+            "paymentMethod": "Phương thức thanh toán",
+            "reason": {
+                "title": "Lý do thanh toán thất bại",
+                "desc": "Thẻ của bạn đã bị từ chối. Vui lòng kiểm tra lại thông tin thẻ và liên hệ với ngân hàng của bạn hoặc thử lại sau vài phút.",
+                "idea": {
+                    "title": "Các giải pháp đề xuất",
+                    "idea1": "Kiểm tra lại số dư tài khoản",
+                    "idea2": "Thử thanh toán bằng thẻ khác"
+                }
+            },
+            "desc": "Nếu bạn cần hỗ trợ, vui lòng liên hệ với chúng tôi qua",
+            "paymentAgain": "Thử lại thanh toán",
+            "otherPayment": "Chọn phương thức khác"
+        }
     }
 }

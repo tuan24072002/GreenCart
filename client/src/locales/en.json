@@ -148,5 +148,128 @@
         "free": "Free",
         "tax": "Tax",
         "total": "Total Amount"
+    },
+    "myOrders": {
+        "title": "My orders",
+        "orderId": "Order ID",
+        "paymentType": "Payment Type",
+        "payment": "Payment",
+        "total": "Total Amount",
+        "category": "Category",
+        "quantity": "Quantity",
+        "status": "Status",
+        "Order Placed": "Order Placed",
+        "date": "Date",
+        "amount": "Amount",
+        "paid": "Paid",
+        "pending": "Pending"
+    },
+    "orderDetail": {
+        "title": "Order Details",
+        "paid": "Paid",
+        "pending": "Pending",
+        "createdAt": "Created At",
+        "orderId": "Order ID",
+        "paymentType": "Payment Type",
+        "orderItems": "Order Items",
+        "category": "Category",
+        "quantity": "Quantity",
+        "delivery": "Delivery",
+        "name": "Name",
+        "phone": "Phone",
+        "address": "Address",
+        "orderSummary": "Order Summary",
+        "subtotal": "Subtotal",
+        "deliveryFee": "Delivery Fee",
+        "free": "Free",
+        "tax": "Tax",
+        "total": "Total Amount",
+        "buyThisAgain": "Buy this again",
+        "payNow": "Pay now",
+        "close": "Close"
+    },
+    "addAddress": {
+        "title1": "Add Shipping",
+        "title2": "Address",
+        "firstName": "First Name",
+        "lastName": "Last Name",
+        "email": "Email",
+        "street": "Number house, street",
+        "ward": "Select Ward",
+        "district": "Select District",
+        "city": "Select City",
+        "phone": "Phone Number",
+        "button": "Save Address"
+    },
+    "settings": {
+        "General": {
+            "title": "General",
+            "changeName": "Change Name",
+            "toggleTheme": "Toggle Theme",
+            "light": "Light",
+            "dark": "Dark"
+        },
+        "Language": {
+            "title": "Language"
+        },
+        "Change Password": {
+            "title": "Change Password",
+            "currentPass": "Current Password",
+            "newPass": "New Password",
+            "confirmPass": "Confirm Password",
+            "button": "Change Password"
+        }
+    },
+    "checkoutOnline": {
+        "title": "Choose a payment method",
+        "Momo": {
+            "title": "Momo",
+            "desc": "Secure and fast payment with Momo e-wallet"
+        },
+        "ZaloPay": {
+            "title": "ZaloPay",
+            "desc": "Easy payment with ZaloPay"
+        },
+        "VNPay": {
+            "title": "VNPay",
+            "desc": "VNPay payment gateway - Pay anytime, anywhere"
+        },
+        "button": "Proceed to Payment"
+    },
+    "redirectPayment": {
+        "success": {
+            "back": "Back to homepage",
+            "title": "Payment Successful!",
+            "thanks": "Thank you for your order at",
+            "orderId": "Order ID",
+            "total": "Total Payment",
+            "paymentMethod": "Payment Method",
+            "title1": "Preparing Your Order",
+            "desc1": "Your order is being prepared and will be delivered as soon as possible",
+            "title2": "Estimated Delivery Time",
+            "desc2": "Your order will be delivered within the next 2 hours",
+            "followOrder": "Track Order",
+            "continue": "Continue Shopping"
+        },
+        "failed": {
+            "back": "Back to homepage",
+            "title": "Payment Failed!",
+            "sorry": "Sorry, an error occurred during the payment process",
+            "orderId": "Order ID",
+            "total": "Total Payment",
+            "paymentMethod": "Payment Method",
+            "reason": {
+                "title": "Reason for Payment Failure",
+                "desc": "Your card was declined. Please check your card information, contact your bank, or try again in a few minutes.",
+                "idea": {
+                    "title": "Suggested Solutions",
+                    "idea1": "Check your account balance",
+                    "idea2": "Try using a different card"
+                }
+            },
+            "desc": "If you need assistance, please contact us via",
+            "paymentAgain": "Try Payment Again",
+            "otherPayment": "Choose Another Payment Method"
+        }
     }
 }

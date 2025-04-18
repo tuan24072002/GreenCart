@@ -74,7 +74,10 @@ import barley_image from "./barley_image.png";
 import empty_box from "./empty_box_1.svg";
 import vnFlag from "./vietnam.png";
 import ukFlag from "./unitedkingdom.png";
-
+import momo from "./momo.png";
+import zalopay from "./zalopay.png";
+import vnpay from "./vnpay.png";
+import empty_box_1 from "./empty_box_1.svg";
 export const assets = {
   logo_dark,
   logo,
@@ -108,6 +111,10 @@ export const assets = {
   empty_box,
   vnFlag,
   ukFlag,
+  momo,
+  zalopay,
+  vnpay,
+  empty_box_1,
 };
 
 export const categories = [
@@ -924,5 +931,25 @@ export const dummyOrders = [
     isPaid: false,
     createdAt: "2025-03-25T07:17:13.068Z",
     updatedAt: "2025-03-25T07:17:13.068Z",
+  },
+];
+export const paymentMethods = [
+  {
+    id: "momo",
+    name: "Momo",
+    logo: momo,
+    description: "Thanh toán an toàn và nhanh chóng với ví Momo",
+  },
+  {
+    id: "zalopay",
+    name: "ZaloPay",
+    logo: zalopay,
+    description: "Thanh toán dễ dàng với ZaloPay",
+  },
+  {
+    id: "vnpay",
+    name: "VNPay",
+    logo: vnpay,
+    description: "Cổng thanh toán VNPay - Thanh toán mọi lúc, mọi nơi",
   },
 ];

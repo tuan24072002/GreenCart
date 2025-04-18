@@ -19,9 +19,9 @@ import { supportedLanguages } from "@/utils/languages"
 import { useTranslation } from "react-i18next"
 
 const Language = () => {
-    const { i18n } = useTranslation();
+    const { i18n, t } = useTranslation();
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState(localStorage.getItem("language") ?? "");
 
     useEffect(() => {
         if (value === "") {
@@ -31,7 +31,7 @@ const Language = () => {
     }, [value, i18n])
     return (
         <div className="pt-4 pl-2 space-y-2">
-            <p className="text-lg font-medium text-accent-foreground">Language:</p>
+            <p className="text-lg font-medium text-accent-foreground">{t("settings.Language.title")}:</p>
             <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                     <Button

@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next"
 const NewsLetter = () => {
     const { t } = useTranslation();
     return (
-        <div className="flex flex-col items-center justify-center text-center space-y-2 mt-24 pb-14">
+        <div className="flex flex-col items-center justify-center text-center space-y-2 mt-24 pb-38">
             <h1 className="md:text-4xl text-2xl font-semibold text-accent-foreground">{t(`home.missDeal.title`)}</h1>
             <p className="md:text-lg text-muted-foreground pb-8">
                 {t(`home.missDeal.desc`)}
