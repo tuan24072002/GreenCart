@@ -28,7 +28,7 @@ const ChangePassword = () => {
     }
     return (
         <div className="pt-4 pl-2">
-            <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-5xl mx-auto">
+            <form onSubmit={handleSubmit} className="space-y-4 w-full max-w-3xl mx-auto">
                 <div className="flex flex-col gap-1.5 w-full">
                     <Label htmlFor="currPass" className="md:text-lg text-base">
                         {t(`settings.Change Password.currentPass`)}:

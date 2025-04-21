@@ -15,9 +15,9 @@
         "slogan": "We deliver fresh groceries and snacks straight to your door. Trusted by thousands, we aim to make your shopping experience simple and affordable.",
         "Quick Links": {
             "title": "Quick Links",
-            "home": "Trang Chủ",
-            "products": "Sản Phẩm",
-            "contact": "Liên Hệ"
+            "Home": "Home",
+            "Products": "Products",
+            "Contact Us": "Contact Us"
         },
         "Need help?": {
             "title": "Need help?",

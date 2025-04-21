@@ -77,9 +77,9 @@ const Settings = () => {
                 }
                 break;
         }
-    }, [appState.user?.name, dispatch, userState])
+    }, [appState.user?.name, dispatch, navigate, userState])
     return (
-        <div className={cn("flex w-full", appState.showTopBanner ? " h-[calc(100vh-296.85px-72.9px-40px)]" : "h-[calc(100vh-296.85px-72.9px)]")}>
+        <div className={cn("grid grid-cols-[1fr_10fr] w-full h-full pb-24")}>
             <div className="md:min-w-56 lg:min-w-64 min-w-16 border-r h-full text-base border-gray-300 pt-4 flex flex-col transition-all duration-300">
                 {sidebarLinks.map((item, index) => (
                     <Link to={item.path} key={index}
