@@ -10,7 +10,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
     return product && (
         <div onClick={() => navigate(`/products/${product.category.toLowerCase()}/${product.id}`)} className="border border-border bg-card rounded-md max-w-54 md:px-4 px-3 py-2">
             <div className="group cursor-pointer flex items-center justify-center px-2">
-                <img className="group-hover:scale-110 transition max-w-26 md:max-w-36" src={import.meta.env.VITE_BACKEND_URL + product.image[0].slice(1)} alt={product.name} />
+                <img className="group-hover:scale-110 transition max-w-26 md:max-w-36" loading="lazy" src={import.meta.env.VITE_BACKEND_URL + product.image[0].slice(1)} alt={product.name} />
             </div>
             <div className="text-muted-foreground text-sm">
                 <p>{t(`products.category.${product.category.toLowerCase()}`)}</p>
@@ -20,6 +20,7 @@ const ProductCard = ({ product }: { product: ProductType }) => {
                         <img
                             key={`star-${i}`}
                             className='md:w-3.5 w-3'
+                            loading="lazy"
                             src={product.rating > i ? assets.star_icon : assets.star_dull_icon}
                             alt="Star" />
                     ))}

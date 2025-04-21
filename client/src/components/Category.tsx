@@ -19,7 +19,7 @@ const Category = () => {
                             onClick={() => {
                                 navigate(`/products/${category.path.toLowerCase()}`);
                             }} >
-                            <img src={category.image} alt={category.text} className={cn("group-hover:scale-110 transition max-w-28")} />
+                            <img src={category.image} alt={category.text} loading="lazy" className={cn("group-hover:scale-110 transition max-w-28")} />
                             <p className="text-sm font-medium text-black">{t(`category.${category.text}`)}</p>
                         </div>
                     ))

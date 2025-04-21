@@ -8,6 +8,7 @@ const BottomBanner = () => {
             <img
                 src={assets.bottom_banner_image}
                 alt={"Bottom Banner"}
+                loading="lazy"
                 className="w-full hidden md:block" />
             <img
                 src={assets.bottom_banner_image_sm}
@@ -22,6 +23,7 @@ const BottomBanner = () => {
                                 <img
                                     src={feature.icon}
                                     alt={feature.title}
+                                    loading="lazy"
                                     className="md:w-11 w-9" />
                                 <div className="flex flex-col">
                                     <h3 className="text-lg md:text-xl font-semibold text-accent-foreground">{t(`home.why.rs${index + 1}.title`)}</h3>
