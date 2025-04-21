@@ -39,7 +39,7 @@ const Summary = () => {
         },
     ];
     const Card = ({ icon, bg, label, total }: { icon: any, bg: string, label: string, total: number }) => (
-        <div className="w-full h-32 bg-accent p-5 shadow-md rounded-md flex items-center justify-between">
+        <div className="w-full h-32 bg-background dark:bg-accent p-5 shadow-md rounded-md flex items-center justify-between">
             <div className="h-full flex flex-1 flex-col justify-center items-center gap-4">
                 <p className="text-sm lg:text-base lg:uppercase line-clamp-1 capitalize text-accent-foreground">{label}</p>
                 <span className="text-base font-semibold text-primary-dull">
@@ -67,7 +67,7 @@ const Summary = () => {
             {
                 dashboardState.status === "loading" ?
                     Array.from({ length: 4 }).map((_, index) => (
-                        <div className="w-full h-32 bg-accent p-5 shadow-md rounded-md flex items-center justify-between gap-10" key={`Skeleton dashboard: ${index}`}>
+                        <div className="w-full h-32 bg-background dark:bg-accent p-5 shadow-md rounded-md flex items-center justify-between gap-10" key={`Skeleton dashboard: ${index}`}>
                             <div className="h-full flex flex-1 flex-col justify-center items-center gap-4">
                                 <Skeleton className="w-full h-4" />
                                 <Skeleton className="w-full h-4" />

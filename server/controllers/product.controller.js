@@ -5,8 +5,15 @@ export const productList = async (req, res) => {
     try {
         const page = parseInt(req.query.page) || 1;
         const limit = parseInt(req.query.limit) || 12;
+        const showAll = req.query.showAll ?? false;
         const skip = (page - 1) * limit;
-
+        if (showAll) {
+            const products = await Product.find({ inStock: true });
+            return res.status(200).json({
+                succes: true,
+                data: { products }
+            })
+        }
         const [products, total] = await Promise.all([
             Product
                 .find({})

@@ -44,13 +44,15 @@ const OrderDetail = ({ order }: { order: OrderModel }) => {
                 processing("Processing", true);
                 break;
             case "completed":
-                if (paymentState.item.resultCode === 0) {
-                    window.location.href = paymentState.item.payUrl;
+                if (paymentState.selectedMethod === "momo" && paymentState.itemMomo.resultCode === 0) {
+                    window.location.href = paymentState.itemMomo.payUrl;
+                } else if (paymentState.selectedMethod === "zalopay" && paymentState.itemZaloPay.returnCode === 1) {
+                    window.location.href = paymentState.itemZaloPay.orderUrl;
                 }
                 dispatch(resetActionStatePayment());
                 break;
         }
-    }, [dispatch, paymentState.error, paymentState.item.payUrl, paymentState.item.resultCode, paymentState.statusAction])
+    }, [dispatch, paymentState.error, paymentState.itemMomo?.payUrl, paymentState.itemMomo?.resultCode, paymentState.itemZaloPay?.orderUrl, paymentState.itemZaloPay?.returnCode, paymentState.selectedMethod, paymentState.statusAction])
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>

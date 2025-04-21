@@ -4,7 +4,7 @@ import { parseCommonHttpResult } from "./http/parseCommonHttpResult";
 export const ProductService = {
   listFromJson(data: any) {
     const list: ProductModel[] = [];
-    for (let index = 0; index < data.length; index++) {
+    for (let index = 0; index < data?.length; index++) {
       const element = data[index];
       list.push({
         id: element._id,

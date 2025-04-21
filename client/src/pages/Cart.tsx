@@ -6,7 +6,7 @@ import { useAppContext } from "@/context/AppContext"
 import { chooseDefaultAddress, getAllAddress, removeAddress, resetActionState, selectItem } from "@/slice/address/Address.slice";
 import { setCartItem, updateCart } from "@/slice/cart/Cart.slice";
 import { placeOrderCOD, resetActionStateOrder } from "@/slice/order/Order.slice";
-import { paymentMomo, resetActionStatePayment, setPaymentOption, setShowCheckoutOnline } from "@/slice/payment/Payment.slice";
+import { paymentMomo, paymentZaloPay, resetActionStatePayment, setPaymentOption, setShowCheckoutOnline } from "@/slice/payment/Payment.slice";
 import { fetchAll } from "@/slice/product/Product.slice";
 import { setShowUserLogin } from "@/slice/signin/Signin.slice";
 import { processing } from "@/utils/alert";
@@ -32,13 +32,13 @@ const Cart = () => {
         const tempArr = [];
         for (const key in cartItems) {
             const product = productState.list.find((product) => product.id === key);
-
             if (product) {
                 const productCopy = structuredClone(product);
                 productCopy.quantity = cartItems[key];
                 tempArr.push(productCopy);
             }
         }
+
         setCartArr(tempArr);
     }, [cartItems, productState.list])
 
@@ -79,12 +79,17 @@ const Cart = () => {
                     localStorage.removeItem("cartItems");
                     dispatch(resetActionStateOrder());
                 } else {
-                    toast.success(orderState.success ?? "");
-                    dispatch(paymentMomo({
-                        orderId: `${orderState.item.id}-${Date.now().toString()}`,
+                    const payload = {
+                        orderId: orderState.item.id,
                         amount: orderState.item.amount,
                         lang: appState.language
-                    }))
+                    }
+                    toast.success(orderState.success ?? "");
+                    if (paymentState.selectedMethod === "momo") {
+                        dispatch(paymentMomo(payload));
+                    } else if (paymentState.selectedMethod === "zalopay") {
+                        dispatch(paymentZaloPay(payload));
+                    }
                     dispatch(updateCart({ cartItems: {} }));
                     dispatch(setCartItem({}));
                     localStorage.removeItem("cartItems");
@@ -103,11 +108,16 @@ const Cart = () => {
                 processing("Processing", true);
                 break;
             case "completed":
-                window.location.href = paymentState.item.payUrl;
+                if (paymentState.selectedMethod === "momo" && paymentState.itemMomo.resultCode === 0) {
+                    window.location.href = paymentState.itemMomo.payUrl;
+                } else if (paymentState.selectedMethod === "zalopay" && paymentState.itemZaloPay.returnCode === 1) {
+                    window.location.href = paymentState.itemZaloPay.orderUrl;
+                }
                 dispatch(resetActionStatePayment());
                 break;
         }
-    }, [dispatch, paymentState.error, paymentState.item.payUrl, paymentState.statusAction])
+    }, [dispatch, paymentState.error, paymentState.itemMomo.payUrl, paymentState.itemMomo.resultCode, paymentState.itemZaloPay.orderUrl, paymentState.itemZaloPay.returnCode, paymentState.selectedMethod, paymentState.statusAction])
+
     useEffect(() => {
         switch (addressState.statusAction) {
             case "failed":
@@ -129,7 +139,7 @@ const Cart = () => {
     }, [productState.list, cartItems, getCart])
     useEffect(() => {
         if (appState.logined) {
-            dispatch(fetchAll());
+            dispatch(fetchAll({ showAll: true }));
             dispatch(getAllAddress())
         }
     }, [appState.logined, dispatch])

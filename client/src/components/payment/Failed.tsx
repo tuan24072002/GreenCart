@@ -20,7 +20,7 @@ const Failed = ({ orderId, amount, orderType }: Props) => {
     const handleRetry = () => {
         if (paymentState.selectedMethod === "momo") {
             dispatch(paymentMomo({
-                orderId: `${orderId}-${Date.now().toString()}`,
+                orderId: orderId,
                 amount: amount,
                 lang: appState.language
             }))
@@ -38,13 +38,13 @@ const Failed = ({ orderId, amount, orderType }: Props) => {
                 processing("Processing", true);
                 break;
             case "completed":
-                if (paymentState.item.resultCode === 0) {
-                    window.location.href = paymentState.item.payUrl;
+                if (paymentState.itemMomo.resultCode === 0) {
+                    window.location.href = paymentState.itemMomo.payUrl;
                 }
                 dispatch(resetActionStatePayment());
                 break;
         }
-    }, [dispatch, paymentState.error, paymentState.item.payUrl, paymentState.item.resultCode, paymentState.statusAction])
+    }, [dispatch, paymentState.error, paymentState.itemMomo.payUrl, paymentState.itemMomo.resultCode, paymentState.statusAction])
     return (
         <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100">
             <div className="container mx-auto px-4 py-8">

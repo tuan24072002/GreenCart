@@ -1,18 +1,20 @@
 import { useAppContext } from "@/context/AppContext";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import Success from "./Success";
 import Failed from "./Failed";
-import { useAppDispatch } from "@/app/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { setCartItem } from "@/slice/cart/Cart.slice";
 
 const ResultPayment = () => {
     const dispatch = useAppDispatch();
     const { navigate } = useAppContext();
     const location = useLocation();
+    const paymentState = useAppSelector(state => state.payment);
+    const { paymentMethod } = useParams();
     const queryParams = new URLSearchParams(location.search);
-
-    const orderId = queryParams.get('orderId')?.split("-")[0];
+    //Momo
+    const orderIdMomo = queryParams.get('orderId')?.split("_")[1];
     const amount = queryParams.get('amount');
     const message = queryParams.get('message');
     const partnerCode = queryParams.get('partnerCode');
@@ -20,34 +22,40 @@ const ResultPayment = () => {
     const orderType = queryParams.get('orderType');
     const resultCode = queryParams.get('resultCode');
     const responseTime = queryParams.get('responseTime');
+    //ZaloPay
+    const orderIdZaloPay = queryParams.get('apptransid')?.split("_")[1];
+    const statusZaloPay = queryParams.get('status');
 
     useEffect(() => {
-        if (!orderId || !message || !partnerCode || !orderInfo || !orderType || !resultCode || !responseTime) {
-            navigate("/");
-        } else {
-            const now = Date.now();
-            const diff = now - parseInt(responseTime);
-            const diffMinutes = diff / (1000 * 60);
-            if (diffMinutes > 1) {
+        if (paymentMethod === "momo") {
+            if (!orderIdMomo || !message || !partnerCode || !orderInfo || !orderType || !resultCode || !responseTime) {
                 navigate("/");
-            } else if (Number(resultCode) === 0) {
+            } else {
+                dispatch(setCartItem({}));
+                localStorage.removeItem("cartItems");
+            }
+        } else if (paymentMethod === "zalopay") {
+            if (!orderIdZaloPay || !statusZaloPay || !amount) {
+                navigate("/");
+            } else {
                 dispatch(setCartItem({}));
                 localStorage.removeItem("cartItems");
             }
         }
-    }, [dispatch, message, navigate, orderId, orderInfo, orderType, partnerCode, responseTime, resultCode])
+    }, [amount, dispatch, message, navigate, orderIdMomo, orderIdZaloPay, orderInfo, orderType, partnerCode, paymentMethod, paymentState.selectedMethod, responseTime, resultCode, statusZaloPay])
 
     return (
-        Number(resultCode) === 0 ?
+        (paymentMethod === "momo" && Number(resultCode) === 0) ||
+            (paymentMethod === "zalopay" && Number(statusZaloPay) === 1) ?
             <Success
-                orderId={orderId || ""}
+                orderId={(paymentMethod === "momo" ? orderIdMomo : orderIdZaloPay) || ""}
                 amount={amount || ""}
-                orderType={orderType || ""}
+                orderType={paymentMethod === "momo" ? "Momo wallet" : paymentMethod === "zalopay" ? "ZaloPay" : ""}
             /> :
             <Failed
-                orderId={orderId || ""}
+                orderId={(paymentMethod === "momo" ? orderIdMomo : orderIdZaloPay) || ""}
                 amount={amount || ""}
-                orderType={orderType || ""}
+                orderType={paymentMethod === "momo" ? "Momo wallet" : paymentMethod === "zalopay" ? "ZaloPay" : ""}
             />
     )
 }

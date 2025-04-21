@@ -1,8 +1,8 @@
-import { PaymentModel } from "@/models/Payment.model";
 import { HttpService } from "./http/HttpService";
 import { parseCommonHttpResult } from "./http/parseCommonHttpResult";
+
 export const PaymentService = {
-  itemFromJson(data: PaymentModel) {
+  itemMomoFromJson(data: any) {
     const item = {
       partnerCode: data.partnerCode,
       orderId: data.orderId,
@@ -16,6 +16,14 @@ export const PaymentService = {
     };
     return item;
   },
+  itemZaloPayFromJson(data: any) {
+    const item = {
+      returnCode: data.return_code,
+      returnMessage: data.return_message,
+      orderUrl: data.order_url,
+    };
+    return item;
+  },
   async paymentMomo(data: any) {
     const res = await HttpService.doPostRequest(`payment/momo`, data);
     return parseCommonHttpResult(res);
@@ -25,6 +33,10 @@ export const PaymentService = {
       `payment/momo/check-trans`,
       data
     );
+    return parseCommonHttpResult(res);
+  },
+  async paymentZaloPay(data: any) {
+    const res = await HttpService.doPostRequest(`payment/zalopay`, data);
     return parseCommonHttpResult(res);
   },
 };

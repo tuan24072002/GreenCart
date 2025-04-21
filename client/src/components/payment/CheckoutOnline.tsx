@@ -3,7 +3,7 @@ import { Wallet2 } from 'lucide-react';
 import { paymentMethods } from '@/assets/assets';
 import { Button } from '../ui/button';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { paymentMomo, setSelectedMethod, setShowCheckoutOnline } from '@/slice/payment/Payment.slice';
+import { paymentMomo, paymentZaloPay, setSelectedMethod, setShowCheckoutOnline } from '@/slice/payment/Payment.slice';
 import { placeOrderOnline } from '@/slice/order/Order.slice';
 import toast from 'react-hot-toast';
 import {
@@ -27,12 +27,12 @@ function CheckoutOnline({ dataPayment, isPlaceOrder }: Props) {
     const addressState = useAppSelector(state => state.address);
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
+        const dataPay = dataPayment.map((item) => ({
+            product: item.id,
+            quantity: item.quantity
+        }));
         if (paymentState.selectedMethod === "momo") {
             dispatch(setShowCheckoutOnline(false));
-            const dataPay = dataPayment.map((item) => ({
-                product: item.id,
-                quantity: item.quantity
-            }));
             // output [{ product: '123', quantity: 1 }]
             if (isPlaceOrder) {
                 const payload = {
@@ -42,9 +42,23 @@ function CheckoutOnline({ dataPayment, isPlaceOrder }: Props) {
                 dispatch(placeOrderOnline(payload));
             } else {
                 dispatch(paymentMomo({
-                    orderId: `${orderState.item.id}-${Date.now().toString()}`,
+                    orderId: orderState.item.id,
                     amount: orderState.item.amount,
                     lang: appState.language
+                }))
+            }
+        } else if (paymentState.selectedMethod === "zalopay") {
+            dispatch(setShowCheckoutOnline(false));
+            if (isPlaceOrder) {
+                const payload = {
+                    items: dataPay,
+                    address: addressState.item.id
+                }
+                dispatch(placeOrderOnline(payload));
+            } else {
+                dispatch(paymentZaloPay({
+                    orderId: orderState.item.id,
+                    amount: orderState.item.amount
                 }))
             }
         } else {

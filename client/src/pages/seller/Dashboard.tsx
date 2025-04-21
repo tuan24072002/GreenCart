@@ -32,7 +32,7 @@ const Dashboard = () => {
             <Summary />
             {
                 dashboardState.status === "loading" ?
-                    <div className="bg-accent p-4 rounded-md shadow-md w-full h-[calc(100vh-230.89px)]">
+                    <div className="bg-background dark:bg-accent p-4 rounded-md shadow-md w-full h-[calc(100vh-230.89px)]">
                         <div className="flex justify-between items-center">
                             <Skeleton className="h-6 w-56" />
                             <div className="flex md:flex-row flex-col items-center gap-2">
@@ -48,9 +48,9 @@ const Dashboard = () => {
                             }
                         </div>
                     </div> :
-                    <div className="flex flex-col bg-accent p-4 rounded-md shadow-md w-full gap-10 h-[calc(100vh-230.89px)]">
+                    <div className="flex flex-col bg-background dark:bg-accent p-4 rounded-md shadow-md w-full gap-10 h-[calc(100vh-230.89px)]">
                         <div className="flex justify-between items-center">
-                            <h4 className="text-gray-600 text-xl font-bold">Chart by Revenue:</h4>
+                            <h4 className="text-accent-foreground text-xl font-bold">Chart by Revenue:</h4>
                             <div className="grid lg:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-2">
                                 <Select
                                     value={selectedChart}

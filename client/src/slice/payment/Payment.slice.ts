@@ -3,16 +3,19 @@ import { ActionSliceState } from "../state";
 import { createSlice } from "@reduxjs/toolkit";
 import { commonCreateAsyncThunk } from "../thunk";
 import { errorMessage } from "@/utils/util";
-import { PaymentModel } from "@/models/Payment.model";
+import { MomoModel } from "@/models/Momo.model";
+import { ZaloPayModel } from "@/models/ZaloPay.model";
 
 interface PaymentState extends ActionSliceState {
-  item: PaymentModel;
+  itemMomo: MomoModel;
+  itemZaloPay: ZaloPayModel;
   paymentOption: "COD" | "Online";
   showCheckoutOnline: boolean;
   selectedMethod: "momo" | "zalopay" | "vnpay" | string;
 }
 const initialState: PaymentState = {
-  item: PaymentModel.initialize(),
+  itemMomo: MomoModel.initialize(),
+  itemZaloPay: ZaloPayModel.initialize(),
   paymentOption: "COD",
   showCheckoutOnline: false,
   selectedMethod: "",
@@ -27,6 +30,10 @@ export const paymentMomo: any = commonCreateAsyncThunk({
 export const checkTransMomo: any = commonCreateAsyncThunk({
   type: "payment/checkTransMomo",
   action: PaymentService.checkTransMomo,
+});
+export const paymentZaloPay: any = commonCreateAsyncThunk({
+  type: "payment/paymentZaloPay",
+  action: PaymentService.paymentZaloPay,
 });
 export const paymentSlice = createSlice({
   name: "payment",
@@ -55,7 +62,7 @@ export const paymentSlice = createSlice({
     builder
       .addCase(paymentMomo.fulfilled, (state, action) => {
         state.success = action.payload.data ? action.payload.data.message : "";
-        state.item = action.payload.data ? action.payload.data.data : {};
+        state.itemMomo = action.payload.data ? action.payload.data.data : {};
         state.statusAction = "completed";
       })
       .addCase(paymentMomo.pending, (state) => {
@@ -74,6 +81,21 @@ export const paymentSlice = createSlice({
         state.statusAction = "loading";
       })
       .addCase(checkTransMomo.rejected, (state, action) => {
+        const error = Object(action.payload);
+        state.statusAction = "failed";
+        state.error = errorMessage(error);
+      })
+      .addCase(paymentZaloPay.fulfilled, (state, action) => {
+        state.success = action.payload.data ? action.payload.data.message : "";
+        state.itemZaloPay = PaymentService.itemZaloPayFromJson(
+          action.payload.data ? action.payload.data.data : {}
+        );
+        state.statusAction = "completed";
+      })
+      .addCase(paymentZaloPay.pending, (state) => {
+        state.statusAction = "loading";
+      })
+      .addCase(paymentZaloPay.rejected, (state, action) => {
         const error = Object(action.payload);
         state.statusAction = "failed";
         state.error = errorMessage(error);

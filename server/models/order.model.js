@@ -11,7 +11,7 @@ const orderSchema = new mongoose.Schema({
     amount: { type: Number, required: true },
     address: { type: String, required: true, ref: "Address" },
     status: { type: String, default: "Order Placed" },
-    paymentType: { type: String, required: true, enum: ["COD", "Online"] },
+    paymentType: { type: String, required: true, enum: ["COD", "Online", "Momo", "ZaloPay", "VNPay"] },
     isPaid: { type: Boolean, required: true, default: false },
 }, { timestamps: true });
 

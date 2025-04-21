@@ -82,7 +82,7 @@ const App = () => {
     },
     //Payment result
     {
-      path: "/redirectUrl",
+      path: "/redirectUrl/:paymentMethod",
       element: <ResultPayment />
     },
   ];

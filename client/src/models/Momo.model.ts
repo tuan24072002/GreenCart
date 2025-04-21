@@ -1,4 +1,4 @@
-class PaymentModel {
+class MomoModel {
   partnerCode: string;
   orderId: string;
   requestId: string;
@@ -43,4 +43,4 @@ class PaymentModel {
     };
   }
 }
-export { PaymentModel };
+export { MomoModel };
