@@ -5,13 +5,13 @@ import dashboardSlice from "@/slice/dashboard/Dashboard.slice";
 import orderSlice from "@/slice/order/Order.slice";
 import paymentSlice from "@/slice/payment/Payment.slice";
 import productSlice from "@/slice/product/Product.slice";
-import signinSlice from "@/slice/signin/Signin.slice";
+import authSlice from "@/slice/auth/Auth.slice";
 import userSlice from "@/slice/user/User.slice";
 import { combineReducers } from "@reduxjs/toolkit";
 
 const rootReducer = combineReducers({
   app: appSlice,
-  signin: signinSlice,
+  auth: authSlice,
   product: productSlice,
   cart: cartSlice,
   address: addressSlice,

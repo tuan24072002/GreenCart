@@ -34,7 +34,7 @@ const App = () => {
   const location = useLocation();
   const clearLayout = ["redirectUrl", "seller"].includes(location.pathname.split("/")[1]);
   const appState = useAppSelector(state => state.app);
-  const signinState = useAppSelector(state => state.signin);
+  const authState = useAppSelector(state => state.auth);
   const rootRef = useRef<HTMLDivElement>(null);
   const [isReady, setIsReady] = useState(false);
 
@@ -148,7 +148,7 @@ const App = () => {
           </Routes>
         </div>
         {clearLayout ? null : <Footer />}
-        {signinState.showUserLogin && <Login />}
+        {authState.showUserLogin && <Login />}
         <Toaster />
       </div>
     </Suspense>

@@ -2,10 +2,12 @@ import express from "express";
 import { protectRoute } from "../middlewares/auth.middleware.js";
 import {
     callbackMomo,
+    callbackVNPay,
     callbackZaloPay,
     checkTransactionMomo,
     confirmPaymentMomo,
     paymentMomo,
+    paymentVNPay,
     paymentZaloPay
 } from "../controllers/payment.controller.js";
 
@@ -18,4 +20,9 @@ paymentRouter.post("/momo/confirm", protectRoute, confirmPaymentMomo);
 // ZaloPay
 paymentRouter.post("/zalopay", protectRoute, paymentZaloPay);
 paymentRouter.post("/zalopay/callback", callbackZaloPay);
+
+// VNPay
+paymentRouter.get("/vnpay", protectRoute, paymentVNPay);
+paymentRouter.get("/vnpay/callback", callbackVNPay);
+
 export default paymentRouter;

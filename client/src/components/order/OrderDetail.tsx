@@ -48,11 +48,14 @@ const OrderDetail = ({ order }: { order: OrderModel }) => {
                     window.location.href = paymentState.itemMomo.payUrl;
                 } else if (paymentState.selectedMethod === "zalopay" && paymentState.itemZaloPay.returnCode === 1) {
                     window.location.href = paymentState.itemZaloPay.orderUrl;
+                } else if (paymentState.selectedMethod === "vnpay" && paymentState.itemVNPay.vnpUrl) {
+                    window.location.href = paymentState.itemVNPay.vnpUrl;
                 }
                 dispatch(resetActionStatePayment());
                 break;
         }
-    }, [dispatch, paymentState.error, paymentState.itemMomo?.payUrl, paymentState.itemMomo?.resultCode, paymentState.itemZaloPay?.orderUrl, paymentState.itemZaloPay?.returnCode, paymentState.selectedMethod, paymentState.statusAction])
+    }, [dispatch, paymentState.error, paymentState.itemMomo.payUrl, paymentState.itemMomo.resultCode, paymentState.itemVNPay.vnpUrl, paymentState.itemZaloPay.orderUrl, paymentState.itemZaloPay.returnCode, paymentState.selectedMethod, paymentState.statusAction])
+
     return (
         <>
             <Dialog open={open} onOpenChange={setOpen}>

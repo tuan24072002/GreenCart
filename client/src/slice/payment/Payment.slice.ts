@@ -5,10 +5,12 @@ import { commonCreateAsyncThunk } from "../thunk";
 import { errorMessage } from "@/utils/util";
 import { MomoModel } from "@/models/Momo.model";
 import { ZaloPayModel } from "@/models/ZaloPay.model";
+import { VNPayModel } from "@/models/VNPay.model";
 
 interface PaymentState extends ActionSliceState {
   itemMomo: MomoModel;
   itemZaloPay: ZaloPayModel;
+  itemVNPay: VNPayModel;
   paymentOption: "COD" | "Online";
   showCheckoutOnline: boolean;
   selectedMethod: "momo" | "zalopay" | "vnpay" | string;
@@ -16,6 +18,7 @@ interface PaymentState extends ActionSliceState {
 const initialState: PaymentState = {
   itemMomo: MomoModel.initialize(),
   itemZaloPay: ZaloPayModel.initialize(),
+  itemVNPay: VNPayModel.initialize(),
   paymentOption: "COD",
   showCheckoutOnline: false,
   selectedMethod: "",
@@ -35,6 +38,11 @@ export const paymentZaloPay: any = commonCreateAsyncThunk({
   type: "payment/paymentZaloPay",
   action: PaymentService.paymentZaloPay,
 });
+export const paymentVNPay: any = commonCreateAsyncThunk({
+  type: "payment/paymentVNPay",
+  action: PaymentService.paymentVNPay,
+});
+
 export const paymentSlice = createSlice({
   name: "payment",
   initialState,
@@ -96,6 +104,21 @@ export const paymentSlice = createSlice({
         state.statusAction = "loading";
       })
       .addCase(paymentZaloPay.rejected, (state, action) => {
+        const error = Object(action.payload);
+        state.statusAction = "failed";
+        state.error = errorMessage(error);
+      })
+      .addCase(paymentVNPay.fulfilled, (state, action) => {
+        state.success = action.payload.data ? action.payload.data.message : "";
+        state.itemVNPay = PaymentService.itemVNPayFromJson(
+          action.payload.data ? action.payload.data.data : {}
+        );
+        state.statusAction = "completed";
+      })
+      .addCase(paymentVNPay.pending, (state) => {
+        state.statusAction = "loading";
+      })
+      .addCase(paymentVNPay.rejected, (state, action) => {
         const error = Object(action.payload);
         state.statusAction = "failed";
         state.error = errorMessage(error);

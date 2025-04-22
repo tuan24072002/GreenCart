@@ -1,5 +1,7 @@
+import axios from "axios";
+import { googleClient } from "../configs/google.js";
 import User from "../models/user.model.js";
-import { createAccessToken, createRefreshToken } from "../utils/index.js";
+import { createAccessToken, createRefreshToken, verifyAccessToken } from "../utils/index.js";
 import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
@@ -33,7 +35,6 @@ export const register = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 };
-
 export const login = async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -47,7 +48,13 @@ export const login = async (req, res) => {
         if (!user) {
             return res.status(401).json({
                 success: false,
-                message: "Invalid email or password."
+                message: "Invalid email or password!"
+            })
+        }
+        if (!user?.password && user?.googleId) {
+            return res.status(401).json({
+                success: false,
+                message: "This account was registered via Google. Please set a password before logging in with email!"
             })
         }
         const isMatch = user.comparePassword(password);
@@ -133,6 +140,115 @@ export const refreshToken = async (req, res) => {
             success: false,
             message: error.message
         })
+    }
+}
+export const loginGoogle = async (req, res) => {
+    try {
+        const { accessToken } = req.body;
+        const payload = await verifyAccessToken(accessToken);
+
+        const { email, name, sub } = payload;
+        let user = await User.findOne({ email });
+        if (!user) {
+            user = await User.create({ name, email, googleId: sub })
+            return res.status(201).json({
+                success: true,
+                data: {
+                    user: user,
+                    tokens: {
+                        accessToken: createAccessToken(user),
+                        refreshToken: createRefreshToken(user)
+                    }
+                },
+                message: "Email login successful!"
+            })
+        } else if (user && !user.googleId) {
+            user = await User.findOneAndUpdate({ email }, { googleId: sub }, { new: true })
+            return res.status(200).json({
+                success: true,
+                data: {
+                    user: user,
+                    tokens: {
+                        accessToken: createAccessToken(user),
+                        refreshToken: createRefreshToken(user)
+                    }
+                },
+                message: "Email login successful!"
+            })
+        } else {
+            return res.status(200).json({
+                success: true,
+                data: {
+                    user: user,
+                    tokens: {
+                        accessToken: createAccessToken(user),
+                        refreshToken: createRefreshToken(user)
+                    }
+                },
+                message: "Email login successful!"
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+export const loginFacebook = async (req, res) => {
+    try {
+        const { accessToken, userID } = req.body;
+        const fbRes = await axios.get(
+            `https://graph.facebook.com/v12.0/${userID}`,
+            {
+                params: {
+                    access_token: accessToken,
+                    fields: "id,name,email,picture",
+                },
+            }
+        );
+        const { id, name, email } = fbRes.data;
+        let user = await User.findOne({ email });
+        if (!user) {
+            user = await User.create({ name, email, facebookId: id });
+            return res.status(201).json({
+                success: true,
+                data: {
+                    user: user,
+                    tokens: {
+                        accessToken: createAccessToken(user),
+                        refreshToken: createRefreshToken(user)
+                    }
+                },
+                message: "Facebook login successful!"
+            });
+        } else if (user && !user.facebookId) {
+            user = await User.findOneAndUpdate({ email }, { facebookId: id }, { new: true })
+            return res.status(200).json({
+                success: true,
+                data: {
+                    user: user,
+                    tokens: {
+                        accessToken: createAccessToken(user),
+                        refreshToken: createRefreshToken(user)
+                    }
+                },
+                message: "Facebook login successful!"
+            })
+        } else {
+            return res.status(200).json({
+                success: true,
+                data: {
+                    user: user,
+                    tokens: {
+                        accessToken: createAccessToken(user),
+                        refreshToken: createRefreshToken(user)
+                    }
+                },
+                message: "Facebook login successful!"
+            })
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
     }
 }
 export const isAuth = async (req, res) => {

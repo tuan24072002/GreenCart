@@ -3,6 +3,8 @@ import {
     changePassword,
     isAuth,
     login,
+    loginFacebook,
+    loginGoogle,
     refreshToken,
     register,
     updateUser
@@ -13,6 +15,8 @@ const userRouter = express.Router();
 
 userRouter.post('/register', register);
 userRouter.post('/login', login);
+userRouter.post('/login-google', loginGoogle);
+userRouter.post('/login-facebook', loginFacebook);
 userRouter.post('/refresh', refreshToken);
 userRouter.get('/is-auth', protectRoute, isAuth);
 userRouter.put('/update', protectRoute, updateUser);

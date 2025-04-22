@@ -1,60 +1,18 @@
-import { LoginModel } from "@/models/Login.model";
 import { HttpService } from "./http/HttpService";
 import { parseCommonHttpResult } from "./http/parseCommonHttpResult";
 
-interface Authen {
-  authenticate(args: LoginModel): any;
-}
-class LocalAuthen implements Authen {
-  async authenticate(arg: LoginModel) {
-    const response = await HttpService.doPostRequest(
-      "/user/login",
-      {
-        email: arg.email,
-        password: arg.password,
-      },
-      false
-    );
-    if (response.status == 200) {
-      const data = response.data.data;
-
-      if (arg.remember) {
-        localStorage.setItem("remember_email", arg.email);
-        localStorage.setItem("remember_password", arg.password);
-      } else {
-        localStorage.removeItem("remember_email");
-        localStorage.removeItem("remember_password");
-      }
-      localStorage.setItem("accessToken", data.tokens.accessToken);
-      HttpService.setToken(data.tokens.accessToken);
-      localStorage.setItem("refreshToken", data.tokens.refreshToken);
-      HttpService.setLocalRefToken(data.tokens.refreshToken);
-      localStorage.setItem("userId", data.user._id);
-      localStorage.setItem("user", JSON.stringify(data.user));
-      localStorage.setItem("cartItems", JSON.stringify(data.user.cartItems));
-      return data.profile;
+export const AuthService = {
+  async login(data: any) {
+    if (data.remember) {
+      localStorage.setItem("remember_email", data.email);
+      localStorage.setItem("remember_password", data.password);
+    } else {
+      localStorage.removeItem("remember_email");
+      localStorage.removeItem("remember_password");
     }
-    return { code: response.status, message: response.statusText };
-  }
-}
-class AuthenManager {
-  executeAuthenticate(arg: LoginModel) {
-    if (arg instanceof LoginModel) {
-      return new LocalAuthen().authenticate(arg);
-    }
-  }
-}
-class AuthenEventHandler {
-  constructor(public authenManager: AuthenManager) {}
-  handleAuthen(arg: LoginModel) {
-    return this.authenManager.executeAuthenticate(arg);
-  }
-}
-class AuthService {
-  login(arg: LoginModel, authenManager: AuthenManager) {
-    const authenHandler = new AuthenEventHandler(authenManager);
-    return authenHandler.handleAuthen(arg);
-  }
+    const res = await HttpService.doPostRequest(`/user/login`, data);
+    return parseCommonHttpResult(res);
+  },
   logout() {
     localStorage.removeItem("user");
     localStorage.removeItem("email");
@@ -64,19 +22,26 @@ class AuthService {
     HttpService.setLocalRefToken("");
     localStorage.removeItem("userId");
     localStorage.removeItem("cartItems");
-  }
+  },
   getCurrentUser() {
-    const userStr = localStorage.getItem("user");
-    if (userStr) return JSON.parse(userStr);
+    const userString = localStorage.getItem("user");
+    if (userString) return JSON.parse(userString);
     return null;
-  }
+  },
+  async register(data: any) {
+    const res = await HttpService.doPostRequest(`/user/register`, data);
+    return parseCommonHttpResult(res);
+  },
   async changePassword(data: any) {
-    const res = await HttpService.doPatchRequest(`/auth/password/change`, data);
+    const res = await HttpService.doPutRequest(`/user/change-password`, data);
     return parseCommonHttpResult(res);
-  }
-  async resetPassword(data: any) {
-    const res = await HttpService.doPatchRequest(`/auth/password/reset`, data);
+  },
+  async loginGoogle(data: any) {
+    const res = await HttpService.doPostRequest(`user/login-google`, data);
     return parseCommonHttpResult(res);
-  }
-}
-export { AuthService, AuthenManager, LocalAuthen, AuthenEventHandler };
+  },
+  async loginFacebook(data: any) {
+    const res = await HttpService.doPostRequest(`user/login-facebook`, data);
+    return parseCommonHttpResult(res);
+  },
+};

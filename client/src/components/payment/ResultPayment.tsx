@@ -3,14 +3,13 @@ import { useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import Success from "./Success";
 import Failed from "./Failed";
-import { useAppDispatch, useAppSelector } from "@/app/hooks";
+import { useAppDispatch } from "@/app/hooks";
 import { setCartItem } from "@/slice/cart/Cart.slice";
 
 const ResultPayment = () => {
     const dispatch = useAppDispatch();
     const { navigate } = useAppContext();
     const location = useLocation();
-    const paymentState = useAppSelector(state => state.payment);
     const { paymentMethod } = useParams();
     const queryParams = new URLSearchParams(location.search);
     //Momo
@@ -25,6 +24,10 @@ const ResultPayment = () => {
     //ZaloPay
     const orderIdZaloPay = queryParams.get('apptransid')?.split("_")[1];
     const statusZaloPay = queryParams.get('status');
+
+    //VNPay
+    const orderIdVNPay = queryParams.get('orderId');
+    const statusVNPay = queryParams.get('status');
 
     useEffect(() => {
         if (paymentMethod === "momo") {
@@ -41,21 +44,29 @@ const ResultPayment = () => {
                 dispatch(setCartItem({}));
                 localStorage.removeItem("cartItems");
             }
+        } else if (paymentMethod === "vnpay") {
+            if (!orderIdVNPay || !statusVNPay || !amount) {
+                navigate("/");
+            } else {
+                dispatch(setCartItem({}));
+                localStorage.removeItem("cartItems");
+            }
         }
-    }, [amount, dispatch, message, navigate, orderIdMomo, orderIdZaloPay, orderInfo, orderType, partnerCode, paymentMethod, paymentState.selectedMethod, responseTime, resultCode, statusZaloPay])
+    }, [amount, dispatch, message, navigate, orderIdMomo, orderIdVNPay, orderIdZaloPay, orderInfo, orderType, partnerCode, paymentMethod, responseTime, resultCode, statusVNPay, statusZaloPay])
 
     return (
         (paymentMethod === "momo" && Number(resultCode) === 0) ||
-            (paymentMethod === "zalopay" && Number(statusZaloPay) === 1) ?
+            (paymentMethod === "zalopay" && Number(statusZaloPay) === 1) ||
+            (paymentMethod === "vnpay" && Number(statusVNPay) === 0) ?
             <Success
-                orderId={(paymentMethod === "momo" ? orderIdMomo : orderIdZaloPay) || ""}
+                orderId={(paymentMethod === "momo" ? orderIdMomo : paymentMethod === "zalopay" ? orderIdZaloPay : orderIdVNPay) || ""}
                 amount={amount || ""}
-                orderType={paymentMethod === "momo" ? "Momo wallet" : paymentMethod === "zalopay" ? "ZaloPay" : ""}
+                orderType={paymentMethod === "momo" ? "Momo wallet" : paymentMethod === "zalopay" ? "ZaloPay" : paymentMethod === "vnpay" ? "VNPay" : ""}
             /> :
             <Failed
-                orderId={(paymentMethod === "momo" ? orderIdMomo : orderIdZaloPay) || ""}
+                orderId={(paymentMethod === "momo" ? orderIdMomo : paymentMethod === "zalopay" ? orderIdZaloPay : orderIdVNPay) || ""}
                 amount={amount || ""}
-                orderType={paymentMethod === "momo" ? "Momo wallet" : paymentMethod === "zalopay" ? "ZaloPay" : ""}
+                orderType={paymentMethod === "momo" ? "Momo wallet" : paymentMethod === "zalopay" ? "ZaloPay" : paymentMethod === "vnpay" ? "VNPay" : ""}
             />
     )
 }

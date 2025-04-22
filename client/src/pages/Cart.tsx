@@ -6,9 +6,9 @@ import { useAppContext } from "@/context/AppContext"
 import { chooseDefaultAddress, getAllAddress, removeAddress, resetActionState, selectItem } from "@/slice/address/Address.slice";
 import { setCartItem, updateCart } from "@/slice/cart/Cart.slice";
 import { placeOrderCOD, resetActionStateOrder } from "@/slice/order/Order.slice";
-import { paymentMomo, paymentZaloPay, resetActionStatePayment, setPaymentOption, setShowCheckoutOnline } from "@/slice/payment/Payment.slice";
+import { paymentMomo, paymentVNPay, paymentZaloPay, resetActionStatePayment, setPaymentOption, setShowCheckoutOnline } from "@/slice/payment/Payment.slice";
 import { fetchAll } from "@/slice/product/Product.slice";
-import { setShowUserLogin } from "@/slice/signin/Signin.slice";
+import { setShowUserLogin } from "@/slice/auth/Auth.slice";
 import { processing } from "@/utils/alert";
 import { Flag, Trash2 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react"
@@ -89,6 +89,8 @@ const Cart = () => {
                         dispatch(paymentMomo(payload));
                     } else if (paymentState.selectedMethod === "zalopay") {
                         dispatch(paymentZaloPay(payload));
+                    } else if (paymentState.selectedMethod === "vnpay") {
+                        dispatch(paymentVNPay(payload));
                     }
                     dispatch(updateCart({ cartItems: {} }));
                     dispatch(setCartItem({}));
@@ -97,7 +99,7 @@ const Cart = () => {
                 }
                 break;
         }
-    }, [appState.language, dispatch, navigate, orderState, paymentState.paymentOption])
+    }, [appState.language, dispatch, navigate, orderState.error, orderState.item.amount, orderState.item.id, orderState.statusAction, orderState.success, paymentState.paymentOption, paymentState.selectedMethod])
     useEffect(() => {
         switch (paymentState.statusAction) {
             case "failed":
@@ -112,11 +114,13 @@ const Cart = () => {
                     window.location.href = paymentState.itemMomo.payUrl;
                 } else if (paymentState.selectedMethod === "zalopay" && paymentState.itemZaloPay.returnCode === 1) {
                     window.location.href = paymentState.itemZaloPay.orderUrl;
+                } else if (paymentState.selectedMethod === "vnpay" && paymentState.itemVNPay.vnpUrl) {
+                    window.location.href = paymentState.itemVNPay.vnpUrl;
                 }
                 dispatch(resetActionStatePayment());
                 break;
         }
-    }, [dispatch, paymentState.error, paymentState.itemMomo.payUrl, paymentState.itemMomo.resultCode, paymentState.itemZaloPay.orderUrl, paymentState.itemZaloPay.returnCode, paymentState.selectedMethod, paymentState.statusAction])
+    }, [dispatch, paymentState.error, paymentState.itemMomo.payUrl, paymentState.itemMomo.resultCode, paymentState.itemVNPay.vnpUrl, paymentState.itemZaloPay.orderUrl, paymentState.itemZaloPay.returnCode, paymentState.selectedMethod, paymentState.statusAction])
 
     useEffect(() => {
         switch (addressState.statusAction) {
@@ -286,7 +290,8 @@ const Cart = () => {
 
                                 <select
                                     onChange={(e) => dispatch(setPaymentOption(e.target.value as "COD" | "Online"))}
-                                    className="w-full border border-gray-300 bg-background px-3 py-2 mt-2 outline-none">
+                                    className="w-full border border-gray-300 bg-background px-3 py-2 mt-2 outline-none"
+                                    value={paymentState.paymentOption}>
                                     <option value="COD">{t(`cart.payment.cash.title`)}</option>
                                     <option value="Online">{t(`cart.payment.online.title`)}</option>
                                 </select>

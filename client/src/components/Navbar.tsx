@@ -10,7 +10,7 @@ import { useTranslation } from "react-i18next";
 import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { setLogined, setShowTopBanner, setUser } from "@/slice/app/App.slice";
 import { AuthService } from "@/services/Auth.service";
-import { setShowUserLogin } from "@/slice/signin/Signin.slice";
+import { setShowUserLogin } from "@/slice/auth/Auth.slice";
 import { setCartItem } from "@/slice/cart/Cart.slice";
 import { selectItem, setList } from "@/slice/address/Address.slice";
 import { cn } from "@/lib/utils";
@@ -28,8 +28,7 @@ const Navbar = () => {
     const handleLogout = () => {
         dispatch(setLogined(false));
         dispatch(setUser(null));
-        const authService = new AuthService();
-        authService.logout();
+        AuthService.logout();
         dispatch(setCartItem({}));
         dispatch(setList([]));
         dispatch(selectItem({}));

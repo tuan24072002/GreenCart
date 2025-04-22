@@ -3,7 +3,7 @@ import { Wallet2 } from 'lucide-react';
 import { paymentMethods } from '@/assets/assets';
 import { Button } from '../ui/button';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { paymentMomo, paymentZaloPay, setSelectedMethod, setShowCheckoutOnline } from '@/slice/payment/Payment.slice';
+import { paymentMomo, paymentVNPay, paymentZaloPay, setSelectedMethod, setShowCheckoutOnline } from '@/slice/payment/Payment.slice';
 import { placeOrderOnline } from '@/slice/order/Order.slice';
 import toast from 'react-hot-toast';
 import {
@@ -59,6 +59,21 @@ function CheckoutOnline({ dataPayment, isPlaceOrder }: Props) {
                 dispatch(paymentZaloPay({
                     orderId: orderState.item.id,
                     amount: orderState.item.amount
+                }))
+            }
+        } else if (paymentState.selectedMethod === "vnpay") {
+            dispatch(setShowCheckoutOnline(false));
+            if (isPlaceOrder) {
+                const payload = {
+                    items: dataPay,
+                    address: addressState.item.id
+                }
+                dispatch(placeOrderOnline(payload));
+            } else {
+                dispatch(paymentVNPay({
+                    orderId: orderState.item.id,
+                    amount: orderState.item.amount,
+                    lang: appState.language === "vi" ? "vn" : appState.language === 'en' ? 'en' : ""
                 }))
             }
         } else {

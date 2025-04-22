@@ -5,9 +5,11 @@ import { v4 as uuidv4 } from 'uuid';
 const userSchema = new mongoose.Schema({
     name: { type: String, required: true },
     email: { type: String, required: true, unique: true },
-    password: { type: String, required: true },
+    password: { type: String, required: false },
     cartItems: { type: Object, default: {}, },
     isSeller: { type: Boolean, default: false },
+    googleId: { type: String, required: false },
+    facebookId: { type: String, required: false },
     tokenSecretVersion: { type: String, default: uuidv4() }
 }, { minimize: false, timestamps: true });
 

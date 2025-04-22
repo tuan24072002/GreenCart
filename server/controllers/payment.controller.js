@@ -2,6 +2,7 @@ import axios from "axios";
 import crypto from "crypto";
 import Order from "../models/order.model.js";
 import moment from "moment";
+import querystring from "qs";
 
 const accessKeyMomo = process.env.MOMO_ACCESS_KEY;
 const secretKeyMomo = process.env.MOMO_SECRET_KEY;
@@ -268,6 +269,119 @@ export const callbackZaloPay = async (req, res) => {
             return res.status(200).json({
                 success: true,
             })
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+
+// VNPay
+function sortObject(obj) {
+    let sorted = {};
+    let str = [];
+    let key;
+    for (key in obj) {
+        if (obj?.hasOwnProperty(key)) {
+            str?.push(encodeURIComponent(key));
+        }
+    }
+    str.sort();
+    for (key = 0; key < str.length; key++) {
+        sorted[str[key]] = encodeURIComponent(obj[str[key]]).replace(/%20/g, "+");
+    }
+    return sorted;
+}
+export const paymentVNPay = async (req, res) => {
+    try {
+        const {
+            orderId,
+            amount,
+            lang
+        } = req.query;
+
+        process.env.TZ = 'Asia/Ho_Chi_Minh';
+
+        let date = new Date();
+        let createDate = moment(date).format('YYYYMMDDHHmmss');
+
+        let ipAddr = req.headers['x-forwarded-for'] ||
+            req.connection.remoteAddress ||
+            req.socket.remoteAddress ||
+            req.connection.socket.remoteAddress;
+
+        let tmnCode = process.env.VNPAY_TMNCODE;
+        let secretKey = process.env.VNPAY_HASHSECRET;
+        let vnpUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+        // let returnUrl = process.env.FRONTEND_URL + "/redirectUrl/vnpay";
+        let returnUrl = process.env.CALLBACK_URL + '/api/payment/vnpay/callback';
+        let bankCode = "";
+
+        let locale = lang;
+        if (locale === null || locale === '') {
+            locale = 'vn';
+        }
+        let currCode = 'VND';
+        let vnp_Params = {};
+        vnp_Params['vnp_Version'] = '2.1.0';
+        vnp_Params['vnp_Command'] = 'pay';
+        vnp_Params['vnp_TmnCode'] = tmnCode;
+        vnp_Params['vnp_Locale'] = locale;
+        vnp_Params['vnp_CurrCode'] = currCode;
+        vnp_Params['vnp_TxnRef'] = `${moment().format('YYMMDDHHmmss')}_${orderId}`;
+        vnp_Params['vnp_OrderInfo'] = 'Thanh toan cho ma GD:' + `${moment().format('YYMMDDHHmmss')}_${orderId}`;
+        vnp_Params['vnp_OrderType'] = 'other';
+        vnp_Params['vnp_Amount'] = amount * 100;
+        vnp_Params['vnp_ReturnUrl'] = returnUrl;
+        vnp_Params['vnp_IpAddr'] = ipAddr;
+        vnp_Params['vnp_CreateDate'] = createDate;
+        if (bankCode !== null && bankCode !== '') {
+            vnp_Params['vnp_BankCode'] = bankCode;
+        }
+
+        vnp_Params = sortObject(vnp_Params);
+        let signData = querystring.stringify(vnp_Params, { encode: false });
+        let hmac = crypto.createHmac("sha512", secretKey);
+        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
+        vnp_Params['vnp_SecureHash'] = signed;
+        vnpUrl += '?' + querystring.stringify(vnp_Params, { encode: false });
+
+        return res.status(200).json({
+            success: true,
+            data: { vnpUrl }
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+export const callbackVNPay = async (req, res) => {
+    try {
+        let vnp_Params = { ...req.query };
+
+        let secureHash = vnp_Params['vnp_SecureHash'];
+
+        delete vnp_Params['vnp_SecureHash'];
+        delete vnp_Params['vnp_SecureHashType'];
+
+        vnp_Params = sortObject(vnp_Params);
+        let secretKey = process.env.VNPAY_HASHSECRET;
+        let signData = querystring.stringify(vnp_Params, { encode: false });
+        let hmac = crypto.createHmac("sha512", secretKey);
+        let signed = hmac.update(new Buffer(signData, 'utf-8')).digest("hex");
+
+        const orderId = vnp_Params["vnp_TxnRef"].split("_")[1];
+
+        if (secureHash === signed && vnp_Params["vnp_TransactionStatus"] === "00") {
+            //Kiem tra xem du lieu trong db co hop le hay khong va thong bao ket qua
+            await Order.findByIdAndUpdate(orderId, { isPaid: true, paymentType: "VNPay" });
+            return res.redirect(
+                `${process.env.FRONTEND_URL}/redirectUrl/vnpay?status=0&orderId=${orderId}&amount=${Number(vnp_Params["vnp_Amount"]) / 100}`
+            );
+        } else {
+            return res.redirect(
+                `${process.env.FRONTEND_URL}/redirectUrl/vnpay?status=1&orderId=${orderId}&amount=${Number(vnp_Params["vnp_Amount"]) / 100}`
+            );
         }
     } catch (error) {
         console.log(error);

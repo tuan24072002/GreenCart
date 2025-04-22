@@ -24,6 +24,12 @@ export const PaymentService = {
     };
     return item;
   },
+  itemVNPayFromJson(data: any) {
+    const item = {
+      vnpUrl: data.vnpUrl,
+    };
+    return item;
+  },
   async paymentMomo(data: any) {
     const res = await HttpService.doPostRequest(`payment/momo`, data);
     return parseCommonHttpResult(res);
@@ -37,6 +43,10 @@ export const PaymentService = {
   },
   async paymentZaloPay(data: any) {
     const res = await HttpService.doPostRequest(`payment/zalopay`, data);
+    return parseCommonHttpResult(res);
+  },
+  async paymentVNPay(data: any) {
+    const res = await HttpService.doGetRequest(`payment/vnpay`, data);
     return parseCommonHttpResult(res);
   },
 };

@@ -78,6 +78,9 @@ import momo from "./momo.png";
 import zalopay from "./zalopay.png";
 import vnpay from "./vnpay.png";
 import empty_box_1 from "./empty_box_1.svg";
+import google_icon from "./google_icon.png";
+import facebook_icon from "./facebook_icon.png";
+import github_icon from "./github_icon.svg";
 export const assets = {
   logo_dark,
   logo,
@@ -115,6 +118,9 @@ export const assets = {
   zalopay,
   vnpay,
   empty_box_1,
+  google_icon,
+  facebook_icon,
+  github_icon,
 };
 
 export const categories = [
