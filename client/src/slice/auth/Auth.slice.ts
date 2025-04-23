@@ -97,7 +97,6 @@ const authSlice = createSlice({
         localStorage.setItem("refreshToken", data.tokens.refreshToken);
         HttpService.setLocalRefToken(data.tokens.refreshToken);
         localStorage.setItem("user", JSON.stringify(data.user));
-        state.authorized = true;
       })
       .addCase(loginGoogle.rejected, (state, action) => {
         state.status = "failed";
@@ -117,7 +116,6 @@ const authSlice = createSlice({
         localStorage.setItem("refreshToken", data.tokens.refreshToken);
         HttpService.setLocalRefToken(data.tokens.refreshToken);
         localStorage.setItem("user", JSON.stringify(data.user));
-        state.authorized = true;
       })
       .addCase(loginFacebook.rejected, (state, action) => {
         state.status = "failed";
