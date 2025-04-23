@@ -48,4 +48,18 @@ export const AuthService = {
     const res = await HttpService.doPostRequest(`user/verify-email`, data);
     return parseCommonHttpResult(res);
   },
+  async resendVerifyEmail(data: any) {
+    const res = await HttpService.doPostRequest(
+      `user/resend-verify-email`,
+      data
+    );
+    return parseCommonHttpResult(res);
+  },
+  async sendCodeChangePass(data: any) {
+    const res = await HttpService.doPostRequest(
+      `user/send-code-change-password`,
+      data
+    );
+    return parseCommonHttpResult(res);
+  },
 };

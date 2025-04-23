@@ -215,6 +215,7 @@
         "Change Password": {
             "title": "Đổi mật khẩu",
             "currentPass": "Mật khẩu hiện tại",
+            "code": "Mã xác thực",
             "newPass": "Mật khẩu mới",
             "confirmPass": "Xác nhận mật khẩu",
             "button": "Đổi mật khẩu"

@@ -189,21 +189,26 @@ const Login = () => {
                         type="password"
                         required />
                 </div>
+                {state === "login" &&
+                    <div className="flex items-center justify-between w-full">
+                        <div className='w-fit flex items-center'>
+                            <Checkbox id='remember' checked={rememberChecked} onCheckedChange={(checked) => setRememberChecked(checked ?? false)} className='data-[state=checked]:bg-primary' />
+                            <Label htmlFor='remember' className='cursor-pointer text-text ml-1'>Remember</Label>
+                        </div>
+                        <p onClick={() => alert("Forgot password!")} className="hover:underline cursor-pointer">Forgot password?</p>
+                    </div>
+                }
+
                 {state === "register" ? (
                     <p>
-                        Already have account? <span onClick={() => setState("login")} className="text-primary cursor-pointer">click here</span>
+                        Already have account? <span onClick={() => setState("login")} className="text-primary cursor-pointer hover:underline">click here</span>
                     </p>
                 ) : (
                     <p>
-                        Create an account? <span onClick={() => setState("register")} className="text-primary cursor-pointer">click here</span>
+                        Create an account? <span onClick={() => setState("register")} className="text-primary cursor-pointer hover:underline">click here</span>
                     </p>
                 )}
-                {state === "login" &&
-                    <div className='space-y-2 w-fit flex items-center'>
-                        <Checkbox id='remember' checked={rememberChecked} onCheckedChange={(checked) => setRememberChecked(checked ?? false)} className='data-[state=checked]:bg-primary' />
-                        <Label htmlFor='remember' className='cursor-pointer text-text ml-1 pb-2'>Remember</Label>
-                    </div>
-                }
+
                 <div className="grid grid-cols-1 w-full gap-4">
                     <button type="submit" className="bg-primary hover:bg-primary-dull transition-all text-white w-full py-2 rounded-md cursor-pointer active:scale-90">
                         {state === "register" ? "Create Account" : "Login"}

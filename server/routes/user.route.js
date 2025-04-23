@@ -7,6 +7,8 @@ import {
     loginGoogle,
     refreshToken,
     register,
+    resendVerifyEmail,
+    sendVerifyCodeToChangePassword,
     updateUser,
     verifyEmail
 } from '../controllers/user.controller.js';
@@ -21,6 +23,8 @@ userRouter.post('/login-facebook', loginFacebook);
 userRouter.post('/refresh', refreshToken);
 userRouter.get('/is-auth', protectRoute, isAuth);
 userRouter.post('/verify-email', protectRoute, verifyEmail);
+userRouter.post('/resend-verify-email', protectRoute, resendVerifyEmail);
+userRouter.post('/send-code-change-password', protectRoute, sendVerifyCodeToChangePassword);
 userRouter.put('/update', protectRoute, updateUser);
 userRouter.put('/change-password', protectRoute, changePassword);
 

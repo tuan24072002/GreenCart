@@ -1,4 +1,10 @@
-import { PASSWORD_RESET_REQUEST_TEMPLATE, PASSWORD_RESET_SUCCESS_TEMPLATE, VERIFICATION_EMAIL_TEMPLATE, WELCOME_EMAIL_TEMPLATE } from "./email.template.js";
+import {
+    PASSWORD_RESET_REQUEST_TEMPLATE,
+    PASSWORD_RESET_SUCCESS_TEMPLATE,
+    VERIFICATION_EMAIL_TEMPLATE,
+    WELCOME_EMAIL_TEMPLATE,
+    VERIFICATION_EMAIL_CHANGE_PASSWORD_TEMPLATE
+} from "./email.template.js";
 import { sender, transporter } from "./nodemailer.config.js";
 
 export const sendVerificationEmail = async (email, name, verificationToken) => {
@@ -27,7 +33,19 @@ export const sendWelcomeEmail = async (email, name) => {
         throw new Error(`Error sending welcome email: ${error.message}`)
     }
 }
-
+export const sendVerificationEmailChangePassword = async (email, name, verificationToken) => {
+    try {
+        await transporter.sendMail({
+            from: sender,
+            to: email,
+            subject: "Change your password",
+            html: VERIFICATION_EMAIL_CHANGE_PASSWORD_TEMPLATE.replace('{name}', name).replace('{changeCode}', verificationToken),
+        })
+    } catch (error) {
+        console.log(`Error sending verification email: `, error);
+        throw new Error(`Error sending verification email: ${error.message}`)
+    }
+}
 export const sendPasswordResetEmail = async (email, name, resetUrl) => {
     try {
         await transporter.sendMail({

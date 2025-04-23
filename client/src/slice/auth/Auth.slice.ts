@@ -25,12 +25,22 @@ export const verifyEmail: any = commonCreateAsyncThunk({
   type: "auth/verifyEmail",
   action: AuthService.verifyEmail,
 });
+export const resendVerifyEmail: any = commonCreateAsyncThunk({
+  type: "auth/resendVerifyEmail",
+  action: AuthService.resendVerifyEmail,
+});
+export const sendCodeChangePass: any = commonCreateAsyncThunk({
+  type: "auth/sendCodeChangePass",
+  action: AuthService.sendCodeChangePass,
+});
 interface AuthState extends BasicSliceState {
   remember: boolean;
   showUserLogin: boolean;
   showEmailVerification: boolean;
   statusRegister: "idle" | "loading" | "completed" | "failed";
   statusVerifyEmail: "idle" | "loading" | "completed" | "failed";
+  statusResendVerifyEmail: "idle" | "loading" | "completed" | "failed";
+  statusSendCodeChangePass: "idle" | "loading" | "completed" | "failed";
 }
 const initialState: AuthState = {
   remember: false,
@@ -39,6 +49,8 @@ const initialState: AuthState = {
   status: "idle",
   statusRegister: "idle",
   statusVerifyEmail: "idle",
+  statusResendVerifyEmail: "idle",
+  statusSendCodeChangePass: "idle",
   error: "",
   success: "",
   action: "VIE",
@@ -55,6 +67,12 @@ const authSlice = createSlice({
     },
     resetStatusVerifyEmail: (state) => {
       state.statusVerifyEmail = "idle";
+    },
+    resetStatusResendVerifyEmail: (state) => {
+      state.statusResendVerifyEmail = "idle";
+    },
+    resetStatusSendCodeChangPass: (state) => {
+      state.statusSendCodeChangePass = "idle";
     },
     setShowUserLogin: (state, action) => {
       state.showUserLogin = action.payload;
@@ -153,6 +171,32 @@ const authSlice = createSlice({
         state.statusVerifyEmail = "failed";
         const error = Object(action.payload);
         state.error = errorMessage(error);
+      })
+      .addCase(resendVerifyEmail.pending, (state) => {
+        state.statusResendVerifyEmail = "loading";
+      })
+      .addCase(resendVerifyEmail.fulfilled, (state, action) => {
+        state.statusResendVerifyEmail = "completed";
+        state.success =
+          action.payload.data !== "" ? action.payload.data.message : "";
+      })
+      .addCase(resendVerifyEmail.rejected, (state, action) => {
+        state.statusResendVerifyEmail = "failed";
+        const error = Object(action.payload);
+        state.error = errorMessage(error);
+      })
+      .addCase(sendCodeChangePass.pending, (state) => {
+        state.statusSendCodeChangePass = "loading";
+      })
+      .addCase(sendCodeChangePass.fulfilled, (state, action) => {
+        state.statusSendCodeChangePass = "completed";
+        state.success =
+          action.payload.data !== "" ? action.payload.data.message : "";
+      })
+      .addCase(sendCodeChangePass.rejected, (state, action) => {
+        state.statusSendCodeChangePass = "failed";
+        const error = Object(action.payload);
+        state.error = errorMessage(error);
       });
   },
 });
@@ -162,5 +206,7 @@ export const {
   setShowUserLogin,
   setShowEmailVerification,
   resetStatusVerifyEmail,
+  resetStatusResendVerifyEmail,
+  resetStatusSendCodeChangPass,
 } = authSlice.actions;
 export default authSlice.reducer;

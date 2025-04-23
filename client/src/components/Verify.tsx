@@ -2,15 +2,16 @@ import { useAppDispatch, useAppSelector } from "@/app/hooks";
 import { AuthService } from "@/services/Auth.service";
 import { selectItem, setList } from "@/slice/address/Address.slice";
 import { setLogined, setUser } from "@/slice/app/App.slice";
-import { resetStatusVerifyEmail, setShowEmailVerification, verifyEmail } from "@/slice/auth/Auth.slice";
+import { resendVerifyEmail, resetStatusResendVerifyEmail, resetStatusVerifyEmail, setShowEmailVerification, verifyEmail } from "@/slice/auth/Auth.slice";
 import { setCartItem } from "@/slice/cart/Cart.slice";
-import { RotateCcw } from "lucide-react";
+import { Loader2, RotateCcw } from "lucide-react";
 import { FormEvent, useCallback, useEffect, useRef, useState } from "react"
 import toast from "react-hot-toast";
 
 const Verify = () => {
     const dispatch = useAppDispatch();
     const authState = useAppSelector(state => state.auth);
+    const appState = useAppSelector(state => state.app);
     const [code, setCode] = useState(["", "", "", "", "", ""]);
     const inputRef = useRef<(HTMLInputElement)[]>([]);
 
@@ -39,8 +40,8 @@ const Verify = () => {
             inputRef.current[index] = el;
         }
     }, []);
-    const handleResendVerifyEmail = () => {
-
+    const handleResendVerifyEmail = async () => {
+        await dispatch(resendVerifyEmail({ email: appState.user?.email ?? "" }));
     }
     const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, index: number) => {
         if (e.key === "Backspace" && !code[index] && index > 0) {
@@ -87,6 +88,21 @@ const Verify = () => {
                 break
         }
     }, [authState.error, authState.statusVerifyEmail, authState.success, dispatch]);
+    useEffect(() => {
+        switch (authState.statusResendVerifyEmail) {
+            case "completed":
+                {
+                    toast.success(authState.success ?? "Resend verify successful!")
+                    dispatch(resetStatusResendVerifyEmail());
+                }
+                break
+            case "failed":
+                toast.dismiss();
+                toast.error(authState.error ?? "Something went wrong !");
+                dispatch(resetStatusResendVerifyEmail());
+                break
+        }
+    }, [authState.error, authState.statusResendVerifyEmail, authState.success, dispatch]);
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 z-30 flex items-center text-sm text-gray-600 bg-black/50">
             <div className="flex flex-col gap-4 m-auto items-center p-8 py-12 w-96 sm:w-lg rounded-lg shadow-xl border border-gray-200 bg-white">
@@ -110,11 +126,22 @@ const Verify = () => {
                         ))}
                     </div>
                     <p className="hover:underline text-muted-foreground flex items-center gap-2 cursor-pointer w-fit" onClick={handleResendVerifyEmail}>Resend code <RotateCcw size={18} /></p>
-                    <button className="mt-5 w-full py-3 px-4 bg-gradient-to-r  from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200">
-                        Verify Email
+                    <button
+                        type="submit"
+                        disabled={authState.statusVerifyEmail === "loading" || authState.statusResendVerifyEmail === "loading"}
+                        className="mt-5 w-full py-3 px-4 bg-gradient-to-r  from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 flex items-center justify-center">
+                        {
+                            (authState.statusVerifyEmail === "loading" || authState.statusResendVerifyEmail === "loading") ? <Loader2 className="mr-2 size-5 animate-spin" /> : "Verify Email"
+                        }
                     </button>
-                    <button className="w-full py-3 px-4 bg-gray-700 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200" type="button" onClick={handleLogout}>
-                        Logout
+                    <button
+                        disabled={authState.statusVerifyEmail === "loading" || authState.statusResendVerifyEmail === "loading"}
+                        className="w-full py-3 px-4 bg-gray-700 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200 flex items-center justify-center"
+                        type="button"
+                        onClick={handleLogout}>
+                        {
+                            (authState.statusVerifyEmail === "loading" || authState.statusResendVerifyEmail === "loading") ? <Loader2 className="mr-2 size-5 animate-spin" /> : "Logout"
+                        }
                     </button>
                 </form>
             </div>

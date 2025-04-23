@@ -215,6 +215,7 @@
         "Change Password": {
             "title": "Change Password",
             "currentPass": "Current Password",
+            "code": "Verify code",
             "newPass": "New Password",
             "confirmPass": "Confirm Password",
             "button": "Change Password"

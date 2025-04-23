@@ -8,6 +8,7 @@ import {
 import jwt from "jsonwebtoken";
 import {
     sendVerificationEmail,
+    sendVerificationEmailChangePassword,
     sendWelcomeEmail
 } from "../nodemailer/send.email.js";
 
@@ -347,6 +348,64 @@ export const verifyEmail = async (req, res) => {
         res.status(500).json({ success: false, message: error.message });
     }
 }
+export const resendVerifyEmail = async (req, res) => {
+    const { email } = req.body;
+    try {
+        if (!email) {
+            throw new Error(`All fields are required`);
+        }
+        //Random generate 6 digits as verification code
+        const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+        const user = await User.findOne({ email })
+        user.verificationToken = verificationToken;
+        user.verificationExpires = Date.now() + 60 * 60 * 1000; // 1 hour
+        await user.save();
+        await sendVerificationEmail(user.email, user.name, verificationToken);
+        return res.status(201).json({
+            success: true,
+            message: 'Code sent to your email',
+            user: {
+                ...user._doc,
+                password: undefined
+            }
+        });
+    } catch (error) {
+        console.log(`Error in resend verify email: `, error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+export const sendVerifyCodeToChangePassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        if (!email) {
+            throw new Error(`All fields are required`);
+        }
+        //Random generate 6 digits as verification code
+        const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+        const user = await User.findOne({ email })
+        user.verificationToken = verificationToken;
+        user.verificationExpires = Date.now() + 60 * 60 * 1000; // 1 hour
+        await user.save();
+        await sendVerificationEmailChangePassword(user.email, user.name, verificationToken);
+        return res.status(201).json({
+            success: true,
+            message: 'Code sent to your email',
+            user: {
+                ...user._doc,
+                password: undefined
+            }
+        });
+    } catch (error) {
+        console.log(`Error in resend verify email: `, error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
 export const isAuth = async (req, res) => {
     try {
         const { userId } = req.user;
@@ -382,9 +441,37 @@ export const updateUser = async (req, res) => {
 export const changePassword = async (req, res) => {
     try {
         const { userId } = req.user;
-        const { password, newPassword } = req.body;
-        const user = await User.findById(userId);
+        const { password, newPassword, code } = req.body;
+        let user = await User.findById(userId);
+        if (code) {
+            if (code !== user.verificationToken) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Invalid or expired verification code!"
+                })
+            } else {
+                user = await User.findOne({
+                    verificationToken: code,
+                    verificationExpires: { $gt: Date.now() }
+                });
+                if (!user) {
+                    return res.status(400).json({
+                        success: false,
+                        message: "Invalid or expired verification code!"
+                    })
+                }
+                user.verificationToken = undefined;
+                user.verificationExpires = undefined;
+                await user.save();
 
+                user.password = newPassword;
+                await user.save();
+                return res.status(200).json({
+                    success: true,
+                    message: "Password changed successfully!"
+                })
+            }
+        }
         const isMatch = user.comparePassword(password);
         if (!isMatch) {
             return res.status(400).json({

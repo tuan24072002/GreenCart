@@ -31,6 +31,47 @@ export const VERIFICATION_EMAIL_TEMPLATE = `
 </body>
 </html>
 `;
+export const VERIFICATION_EMAIL_CHANGE_PASSWORD_TEMPLATE = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Change Your Password</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333; max-width: 600px; margin: 0 auto; padding: 20px;">
+  <!-- Header -->
+  <div style="background: #44ae7c; padding: 20px; text-align: center;">
+    <h1 style="color: white; margin: 0;">Change Your Password</h1>
+  </div>
+
+  <!-- Body -->
+  <div style="background-color: #f9f9f9; padding: 20px; border-radius: 0 0 5px 5px; box-shadow: 0 2px 5px rgba(0,0,0,0.1);">
+    <p>Hi, {name}</p>
+    <p>We received a request to change the password for your account.</p>
+    <p>Your password change code is:</p>
+    <div style="text-align: center; margin: 30px 0;">
+      <span style="font-size: 32px; font-weight: bold; letter-spacing: 5px; color: #44ae7c;">
+        {changeCode}
+      </span>
+    </div>
+    <p>Please enter this code on the change password page to set a new password.</p>
+    <p><strong>This code will expire in 1 hour</strong> for your security.</p>
+    <p>If you did not request a password change, you can safely ignore this email.</p>
+    <p>Best regards,</p>
+    <strong style="color: #44ae7c; font-size: 16pt;">Green Cart</strong>
+  </div>
+
+  <!-- Footer -->
+  <div style="background: linear-gradient(to right, #bcbcbd, #adadaf); padding:10px;text-align: center;">
+    <h3 style="color: white; margin: 0;">Trần Lê Anh Tuấn &copy; ${new Date().getFullYear()}</h3>
+  </div>
+  <div style="text-align: center; margin-top: 20px; color: #888; font-size: 0.8em;">
+    <p>This is an automated message, please do not reply to this email.</p>
+  </div>
+</body>
+</html>
+`;
 
 export const PASSWORD_RESET_SUCCESS_TEMPLATE = `
 <!DOCTYPE html>
