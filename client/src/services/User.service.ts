@@ -9,6 +9,8 @@ export const UserService = {
       isSeller: data.isSeller,
       tokenSecretVersion: data.tokenSecretVersion,
       cartItems: data.cartItems,
+      googleId: data.googleId,
+      facebookId: data.facebookId,
     };
     return item;
   },

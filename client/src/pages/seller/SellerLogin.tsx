@@ -2,8 +2,8 @@ import { Label } from "../../components/ui/label";
 import { InputField } from "../../components/InputField";
 import { FormikErrors, useFormik } from "formik";
 import { useAppDispatch } from "@/app/hooks";
-import { loginCall } from "@/slice/signin/Signin.slice";
 import { LoginModel } from "@/models/Login.model";
+import { loginCall } from "@/slice/auth/Auth.slice";
 
 const SellerLogin = () => {
     const dispatch = useAppDispatch();

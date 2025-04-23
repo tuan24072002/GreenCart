@@ -6,17 +6,17 @@ import SellerLogin from "./SellerLogin";
 import { useEffect } from "react";
 import { setLogined, setUser } from "@/slice/app/App.slice";
 import toast from "react-hot-toast";
-import { resetStatus } from "@/slice/signin/Signin.slice";
 import { AuthService } from "@/services/Auth.service";
 import { ClipboardList, LayoutDashboard, ListOrdered, SquarePlus } from "lucide-react";
 import { useAppContext } from "@/context/AppContext";
+import { resetStatus } from "@/slice/auth/Auth.slice";
 
 const SellerLayout = () => {
     const { theme } = useThemeContext();
     const { navigate } = useAppContext();
     const dispatch = useAppDispatch();
     const appState = useAppSelector(state => state.app);
-    const signinState = useAppSelector(state => state.signin);
+    const authState = useAppSelector(state => state.auth);
 
     const sidebarLinks = [
         { name: "Dashboard", path: "/seller", icon: <LayoutDashboard /> },
@@ -28,11 +28,10 @@ const SellerLayout = () => {
         dispatch(setLogined(false));
         navigate("/")
         dispatch(setUser(null));
-        const authService = new AuthService();
-        authService.logout();
+        AuthService.logout();
     }
     useEffect(() => {
-        switch (signinState.status) {
+        switch (authState.status) {
             case "completed":
                 {
                     const localUser = localStorage.getItem('user');
@@ -40,7 +39,7 @@ const SellerLayout = () => {
                     dispatch(setLogined(true));
                     dispatch(setUser(user));
                     if (user.isSeller) {
-                        toast.success(signinState.success ?? "Login successful!");
+                        toast.success(authState.success ?? "Login successful!");
                     } else {
                         toast.error("This page is for sellers only!");
                     }
@@ -48,11 +47,11 @@ const SellerLayout = () => {
                 }
                 break
             case "failed":
-                toast.error(signinState.error ?? "Something went wrong !");
+                toast.error(authState.error ?? "Something went wrong !");
                 dispatch(resetStatus());
                 break
         }
-    }, [dispatch, signinState]);
+    }, [dispatch, authState]);
     return (
         appState.user && appState.user?.isSeller ?
             <>

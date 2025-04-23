@@ -16,8 +16,7 @@ export const customMiddleware =
         ) {
           dispatch(setLogined(false));
           dispatch(setUser(null));
-          const authService = new AuthService();
-          authService.logout();
+          AuthService.logout();
           window.location.href = "/";
           return;
         }

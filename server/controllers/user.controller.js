@@ -1,8 +1,15 @@
 import axios from "axios";
-import { googleClient } from "../configs/google.js";
 import User from "../models/user.model.js";
-import { createAccessToken, createRefreshToken, verifyAccessToken } from "../utils/index.js";
+import {
+    createAccessToken,
+    createRefreshToken,
+    verifyAccessToken
+} from "../utils/index.js";
 import jwt from "jsonwebtoken";
+import {
+    sendVerificationEmail,
+    sendWelcomeEmail
+} from "../nodemailer/send.email.js";
 
 export const register = async (req, res) => {
     try {
@@ -20,13 +27,27 @@ export const register = async (req, res) => {
                 message: "User already exists!"
             })
         }
-        const user = await User.create({ name, email, password });
-
+        //Random generate 6 digits as verification code
+        const verificationToken = Math.floor(100000 + Math.random() * 900000).toString();
+        const user = await User.create({
+            name,
+            email,
+            password,
+            verificationToken,
+            verificationExpires: Date.now() + 24 * 60 * 60 * 1000
+        });
         if (user) {
+            await sendVerificationEmail(user.email, user.name, verificationToken);
             user.password = undefined;
             return res.status(201).json({
                 success: true,
-                data: user,
+                data: {
+                    user,
+                    tokens: {
+                        accessToken: createAccessToken(user),
+                        refreshToken: createRefreshToken(user)
+                    }
+                },
                 message: "Account registered successfully",
             });
         }
@@ -51,15 +72,20 @@ export const login = async (req, res) => {
                 message: "Invalid email or password!"
             })
         }
-        if (!user?.password && user?.googleId) {
+        if (!user?.password && (user?.googleId || user?.facebookId)) {
             return res.status(401).json({
                 success: false,
-                message: "This account was registered via Google. Please set a password before logging in with email!"
+                message: `This account was registered via Google. Please set a password before logging in with ${(user?.googleId && !user?.facebookId) ? "Google" : (!user?.googleId && user?.facebookId) ? "Facebook" : "Google or Facebook"}`
             })
         }
         const isMatch = user.comparePassword(password);
         if (user && isMatch) {
             user.password = undefined;
+            await User.findOneAndUpdate(
+                { email },
+                { lastLogin: new Date() },
+                { new: true }
+            )
             res.status(200).json({
                 success: true,
                 data: {
@@ -150,7 +176,13 @@ export const loginGoogle = async (req, res) => {
         const { email, name, sub } = payload;
         let user = await User.findOne({ email });
         if (!user) {
-            user = await User.create({ name, email, googleId: sub })
+            user = await User.create({ name, email, googleId: sub, isVerified: true });
+            await User.findOneAndUpdate(
+                { email },
+                { lastLogin: new Date() },
+                { new: true }
+            )
+            await sendWelcomeEmail(user.email, user.name);
             return res.status(201).json({
                 success: true,
                 data: {
@@ -163,7 +195,11 @@ export const loginGoogle = async (req, res) => {
                 message: "Email login successful!"
             })
         } else if (user && !user.googleId) {
-            user = await User.findOneAndUpdate({ email }, { googleId: sub }, { new: true })
+            user = await User.findOneAndUpdate(
+                { email },
+                { googleId: sub, lastLogin: new Date() },
+                { new: true }
+            )
             return res.status(200).json({
                 success: true,
                 data: {
@@ -176,6 +212,11 @@ export const loginGoogle = async (req, res) => {
                 message: "Email login successful!"
             })
         } else {
+            user = await User.findOneAndUpdate(
+                { email },
+                { lastLogin: new Date() },
+                { new: true }
+            )
             return res.status(200).json({
                 success: true,
                 data: {
@@ -208,7 +249,18 @@ export const loginFacebook = async (req, res) => {
         const { id, name, email } = fbRes.data;
         let user = await User.findOne({ email });
         if (!user) {
-            user = await User.create({ name, email, facebookId: id });
+            await User.create({
+                name,
+                email,
+                facebookId: id,
+                isVerified: true
+            });
+            user = await User.findOneAndUpdate(
+                { email },
+                { lastLogin: new Date() },
+                { new: true }
+            )
+            await sendWelcomeEmail(user.email, user.name);
             return res.status(201).json({
                 success: true,
                 data: {
@@ -221,7 +273,11 @@ export const loginFacebook = async (req, res) => {
                 message: "Facebook login successful!"
             });
         } else if (user && !user.facebookId) {
-            user = await User.findOneAndUpdate({ email }, { facebookId: id }, { new: true })
+            user = await User.findOneAndUpdate(
+                { email },
+                { facebookId: id, lastLogin: new Date() },
+                { new: true }
+            )
             return res.status(200).json({
                 success: true,
                 data: {
@@ -234,6 +290,11 @@ export const loginFacebook = async (req, res) => {
                 message: "Facebook login successful!"
             })
         } else {
+            user = await User.findOneAndUpdate(
+                { email },
+                { lastLogin: new Date() },
+                { new: true }
+            )
             return res.status(200).json({
                 success: true,
                 data: {
@@ -246,6 +307,41 @@ export const loginFacebook = async (req, res) => {
                 message: "Facebook login successful!"
             })
         }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ success: false, message: error.message });
+    }
+}
+export const verifyEmail = async (req, res) => {
+    const { code } = req.body;
+    try {
+        if (!code) {
+            return res.status(400).json({
+                success: false,
+                message: "Verification code is required!"
+            })
+        }
+        const user = await User.findOne({
+            verificationToken: code,
+            verificationExpires: { $gt: Date.now() }
+        });
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid or expired verification code!"
+            })
+        }
+        user.isVerified = true;
+        user.verificationToken = undefined;
+        user.verificationExpires = undefined;
+
+        await user.save();
+        await sendWelcomeEmail(user.email, user.name);
+        return res.status(200).json({
+            success: true,
+            data: user,
+            message: "Email verified successfully!"
+        })
     } catch (error) {
         console.log(error);
         res.status(500).json({ success: false, message: error.message });

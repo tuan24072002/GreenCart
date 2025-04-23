@@ -12,6 +12,8 @@ import { getLanguageData } from "./utils/languages";
 import { HttpService } from "./services/http/HttpService";
 import { useAppDispatch, useAppSelector } from "./app/hooks";
 import { setLanguage } from "./slice/app/App.slice";
+import Verify from "./components/Verify";
+import { setShowEmailVerification } from "./slice/auth/Auth.slice";
 
 const Home = React.lazy(() => import("./pages/Home"));
 const Products = React.lazy(() => import("./pages/Products"));
@@ -106,6 +108,13 @@ const App = () => {
   useEffect(() => {
     window.scrollTo({ left: 0, top: 0, behavior: "smooth" });
   }, [location.pathname]);
+  useEffect(() => {
+    if (appState.logined && !appState.user?.isVerified) {
+      dispatch(setShowEmailVerification(true))
+    } else {
+      dispatch(setShowEmailVerification(false))
+    }
+  }, [appState.logined, appState.user?.isVerified, dispatch])
   if (isReady) {
     setTimeout(() => {
       setIsReady(true)
@@ -149,6 +158,7 @@ const App = () => {
         </div>
         {clearLayout ? null : <Footer />}
         {authState.showUserLogin && <Login />}
+        {authState.showEmailVerification && <Verify />}
         <Toaster />
       </div>
     </Suspense>

@@ -6,33 +6,39 @@ import { errorMessage } from "@/utils/util";
 import { HttpService } from "@/services/http/HttpService";
 
 export const loginCall: any = commonCreateAsyncThunk({
-  type: "signin/login",
+  type: "auth/login",
   action: AuthService.login,
 });
 export const loginGoogle: any = commonCreateAsyncThunk({
-  type: "signin/loginGoogle",
+  type: "auth/loginGoogle",
   action: AuthService.loginGoogle,
 });
 export const loginFacebook: any = commonCreateAsyncThunk({
-  type: "signin/loginFacebook",
+  type: "auth/loginFacebook",
   action: AuthService.loginFacebook,
 });
 export const registerCall: any = commonCreateAsyncThunk({
-  type: "signin/register",
+  type: "auth/register",
   action: AuthService.register,
+});
+export const verifyEmail: any = commonCreateAsyncThunk({
+  type: "auth/verifyEmail",
+  action: AuthService.verifyEmail,
 });
 interface AuthState extends BasicSliceState {
   remember: boolean;
-  authorized: boolean;
   showUserLogin: boolean;
+  showEmailVerification: boolean;
   statusRegister: "idle" | "loading" | "completed" | "failed";
+  statusVerifyEmail: "idle" | "loading" | "completed" | "failed";
 }
 const initialState: AuthState = {
   remember: false,
-  authorized: false,
   showUserLogin: false,
+  showEmailVerification: false,
   status: "idle",
   statusRegister: "idle",
+  statusVerifyEmail: "idle",
   error: "",
   success: "",
   action: "VIE",
@@ -47,8 +53,14 @@ const authSlice = createSlice({
     resetStatusRegister: (state) => {
       state.statusRegister = "idle";
     },
+    resetStatusVerifyEmail: (state) => {
+      state.statusVerifyEmail = "idle";
+    },
     setShowUserLogin: (state, action) => {
       state.showUserLogin = action.payload;
+    },
+    setShowEmailVerification: (state, action) => {
+      state.showEmailVerification = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -66,7 +78,6 @@ const authSlice = createSlice({
         localStorage.setItem("refreshToken", data.tokens.refreshToken);
         HttpService.setLocalRefToken(data.tokens.refreshToken);
         localStorage.setItem("user", JSON.stringify(data.user));
-        state.authorized = true;
       })
       .addCase(loginCall.rejected, (state, action) => {
         state.status = "failed";
@@ -120,14 +131,38 @@ const authSlice = createSlice({
         state.statusRegister = "completed";
         state.success =
           action.payload.data !== "" ? action.payload.data.message : "";
+        const data = action.payload.data.data;
+        localStorage.setItem("accessToken", data.tokens.accessToken);
+        HttpService.setToken(data.tokens.accessToken);
+        localStorage.setItem("refreshToken", data.tokens.refreshToken);
+        HttpService.setLocalRefToken(data.tokens.refreshToken);
+        localStorage.setItem("user", JSON.stringify(data.user));
       })
       .addCase(registerCall.rejected, (state, action) => {
         state.statusRegister = "failed";
         const error = Object(action.payload);
         state.error = errorMessage(error);
+      })
+      .addCase(verifyEmail.pending, (state) => {
+        state.statusVerifyEmail = "loading";
+      })
+      .addCase(verifyEmail.fulfilled, (state, action) => {
+        state.statusVerifyEmail = "completed";
+        state.success =
+          action.payload.data !== "" ? action.payload.data.message : "";
+      })
+      .addCase(verifyEmail.rejected, (state, action) => {
+        state.statusVerifyEmail = "failed";
+        const error = Object(action.payload);
+        state.error = errorMessage(error);
       });
   },
 });
-export const { resetStatus, resetStatusRegister, setShowUserLogin } =
-  authSlice.actions;
+export const {
+  resetStatus,
+  resetStatusRegister,
+  setShowUserLogin,
+  setShowEmailVerification,
+  resetStatusVerifyEmail,
+} = authSlice.actions;
 export default authSlice.reducer;

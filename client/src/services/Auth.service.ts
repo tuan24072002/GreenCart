@@ -44,4 +44,8 @@ export const AuthService = {
     const res = await HttpService.doPostRequest(`user/login-facebook`, data);
     return parseCommonHttpResult(res);
   },
+  async verifyEmail(data: any) {
+    const res = await HttpService.doPostRequest(`user/verify-email`, data);
+    return parseCommonHttpResult(res);
+  },
 };

@@ -10,7 +10,13 @@ const userSchema = new mongoose.Schema({
     isSeller: { type: Boolean, default: false },
     googleId: { type: String, required: false },
     facebookId: { type: String, required: false },
-    tokenSecretVersion: { type: String, default: uuidv4() }
+    tokenSecretVersion: { type: String, default: uuidv4() },
+    lastLogin: { type: Date, default: Date.now() },
+    isVerified: { type: Boolean, default: false },
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
+    verificationToken: String,
+    verificationExpires: Date
 }, { minimize: false, timestamps: true });
 
 userSchema.pre("save", function (next) {

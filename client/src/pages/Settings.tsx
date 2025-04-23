@@ -67,8 +67,7 @@ const Settings = () => {
                     toast.success(userState.success ?? "");
                     dispatch(setLogined(false));
                     dispatch(setUser(null));
-                    const authService = new AuthService();
-                    authService.logout();
+                    AuthService.logout();
                     dispatch(setCartItem({}));
                     dispatch(setList([]));
                     dispatch(selectItem({}));
@@ -79,8 +78,8 @@ const Settings = () => {
         }
     }, [appState.user?.name, dispatch, navigate, userState])
     return (
-        <div className={cn("grid grid-cols-[1fr_10fr] w-full h-full pb-24")}>
-            <div className="md:min-w-56 lg:min-w-64 min-w-16 border-r h-full text-base border-gray-300 pt-4 flex flex-col transition-all duration-300">
+        <div className={cn("grid grid-cols-[1fr_10fr] w-full h-full")}>
+            <div className="md:min-w-56 lg:min-w-64 min-w-16 border-r h-full min-h-64 text-base border-gray-300 pt-4 flex flex-col transition-all duration-300">
                 {sidebarLinks.map((item, index) => (
                     <Link to={item.path} key={index}
                         className={`flex items-center py-3 px-4 gap-3 
