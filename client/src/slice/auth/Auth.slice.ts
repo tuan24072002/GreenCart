@@ -33,6 +33,14 @@ export const sendCodeChangePass: any = commonCreateAsyncThunk({
   type: "auth/sendCodeChangePass",
   action: AuthService.sendCodeChangePass,
 });
+export const forgotPassword: any = commonCreateAsyncThunk({
+  type: "auth/forgotPassword",
+  action: AuthService.forgotPassword,
+});
+export const resetPassword: any = commonCreateAsyncThunk({
+  type: "auth/resetPassword",
+  action: AuthService.resetPassword,
+});
 interface AuthState extends BasicSliceState {
   remember: boolean;
   showUserLogin: boolean;
@@ -41,6 +49,8 @@ interface AuthState extends BasicSliceState {
   statusVerifyEmail: "idle" | "loading" | "completed" | "failed";
   statusResendVerifyEmail: "idle" | "loading" | "completed" | "failed";
   statusSendCodeChangePass: "idle" | "loading" | "completed" | "failed";
+  statusForgotPassword: "idle" | "loading" | "completed" | "failed";
+  statusResetPassword: "idle" | "loading" | "completed" | "failed";
 }
 const initialState: AuthState = {
   remember: false,
@@ -51,6 +61,8 @@ const initialState: AuthState = {
   statusVerifyEmail: "idle",
   statusResendVerifyEmail: "idle",
   statusSendCodeChangePass: "idle",
+  statusForgotPassword: "idle",
+  statusResetPassword: "idle",
   error: "",
   success: "",
   action: "VIE",
@@ -73,6 +85,12 @@ const authSlice = createSlice({
     },
     resetStatusSendCodeChangPass: (state) => {
       state.statusSendCodeChangePass = "idle";
+    },
+    resetStatusForgotPassword: (state) => {
+      state.statusForgotPassword = "idle";
+    },
+    resetStatusResetPassword: (state) => {
+      state.statusResetPassword = "idle";
     },
     setShowUserLogin: (state, action) => {
       state.showUserLogin = action.payload;
@@ -159,6 +177,32 @@ const authSlice = createSlice({
         const error = Object(action.payload);
         state.error = errorMessage(error);
       })
+      .addCase(forgotPassword.pending, (state) => {
+        state.statusForgotPassword = "loading";
+      })
+      .addCase(forgotPassword.fulfilled, (state, action) => {
+        state.statusForgotPassword = "completed";
+        state.success =
+          action.payload.data !== "" ? action.payload.data.message : "";
+      })
+      .addCase(forgotPassword.rejected, (state, action) => {
+        state.statusForgotPassword = "failed";
+        const error = Object(action.payload);
+        state.error = errorMessage(error);
+      })
+      .addCase(resetPassword.pending, (state) => {
+        state.statusResetPassword = "loading";
+      })
+      .addCase(resetPassword.fulfilled, (state, action) => {
+        state.statusResetPassword = "completed";
+        state.success =
+          action.payload.data !== "" ? action.payload.data.message : "";
+      })
+      .addCase(resetPassword.rejected, (state, action) => {
+        state.statusResetPassword = "failed";
+        const error = Object(action.payload);
+        state.error = errorMessage(error);
+      })
       .addCase(verifyEmail.pending, (state) => {
         state.statusVerifyEmail = "loading";
       })
@@ -208,5 +252,7 @@ export const {
   resetStatusVerifyEmail,
   resetStatusResendVerifyEmail,
   resetStatusSendCodeChangPass,
+  resetStatusForgotPassword,
+  resetStatusResetPassword,
 } = authSlice.actions;
 export default authSlice.reducer;

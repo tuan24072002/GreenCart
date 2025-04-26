@@ -7,10 +7,13 @@ import {
 } from "../utils/index.js";
 import jwt from "jsonwebtoken";
 import {
+    sendPasswordResetEmail,
+    sendResetSuccessEmail,
     sendVerificationEmail,
     sendVerificationEmailChangePassword,
     sendWelcomeEmail
 } from "../nodemailer/send.email.js";
+import crypto from "crypto"
 
 export const register = async (req, res) => {
     try {
@@ -418,6 +421,85 @@ export const isAuth = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(500).json({ success: false, message: error.message });
+    }
+}
+export const forgotPassword = async (req, res) => {
+    const { email } = req.body;
+    try {
+        const user = await User.findOne({ email });
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+        const resetToken = crypto.randomBytes(20).toString('hex');
+        const resetExpiresAt = Date.now() + 60 * 60 * 1000; // 1 hour
+        console.log({
+            resetToken,
+            resetExpiresAt
+        });
+
+        user.resetPasswordToken = resetToken;
+        user.resetPasswordExpires = resetExpiresAt;
+        await user.save()
+
+        //send mail
+        const linkResetPassword = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
+        await sendPasswordResetEmail(email, user.name, linkResetPassword)
+
+        return res.status(200).json({
+            success: true,
+            message: 'Password reset link sent to your email',
+        });
+    } catch (error) {
+        console.log(`Error in forgot password: `, error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+}
+export const resetPassword = async (req, res) => {
+    const { token } = req.params;
+    const { password, confirmPassword } = req.body;
+    try {
+        if (!token || !password || !confirmPassword) {
+            throw new Error(`All fields are required`);
+        }
+        if (confirmPassword !== password) {
+            return res.status(400).json({
+                success: false,
+                message: 'Confirm password does not match'
+            })
+        }
+        const user = await User.findOne({
+            resetPasswordToken: token,
+            resetPasswordExpires: { $gt: Date.now() }
+        })
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid or expired reset token'
+            })
+        }
+
+        //Update password
+        user.password = password;
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpires = undefined;
+        await user.save()
+        await sendResetSuccessEmail(user.email, user.name);
+        return res.status(200).json({
+            success: true,
+            message: 'Password reset successfully, redirecting to login page...',
+        });
+    } catch (error) {
+        console.log(`Error in reset password: `, error.message);
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 }
 export const updateUser = async (req, res) => {

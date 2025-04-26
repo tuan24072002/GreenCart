@@ -62,4 +62,15 @@ export const AuthService = {
     );
     return parseCommonHttpResult(res);
   },
+  async forgotPassword(data: any) {
+    const res = await HttpService.doPostRequest(`user/forgot-password`, data);
+    return parseCommonHttpResult(res);
+  },
+  async resetPassword(data: any) {
+    const res = await HttpService.doPostRequest(
+      `user/reset-password/${data.token}`,
+      data.data
+    );
+    return parseCommonHttpResult(res);
+  },
 };

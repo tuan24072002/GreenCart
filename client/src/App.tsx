@@ -30,6 +30,7 @@ const AddProduct = React.lazy(() => import("./pages/seller/AddProduct"));
 const Orders = React.lazy(() => import("./pages/seller/Orders"));
 const ProductList = React.lazy(() => import("./pages/seller/ProductList"));
 const ResultPayment = React.lazy(() => import("./components/payment/ResultPayment"));
+const ResetPassword = React.lazy(() => import("./pages/ResetPassword"));
 
 const App = () => {
   const dispatch = useAppDispatch();
@@ -76,6 +77,10 @@ const App = () => {
     {
       path: "/settings/*",
       element: <Settings />
+    },
+    {
+      path: "/reset-password/:token",
+      element: <ResetPassword />
     },
     //Seller page
     {
@@ -129,7 +134,7 @@ const App = () => {
     <Suspense fallback={<LoadingPage />}>
       <div className="flex flex-col min-h-screen relative bg-background transition-all duration-300" ref={rootRef}>
         {clearLayout ? null : <Navbar />}
-        <div className={cn(!clearLayout && "px-6 md:px-16 lg:px-24 xl:px-32 flex-1")}>
+        <div className={cn(!clearLayout && "px-6 md:px-16 lg:px-24 xl:px-32 flex-1 h-full w-full grid")}>
           <Routes>
             {pageList.map(({ path, element }) => {
               if (path === "/seller") {

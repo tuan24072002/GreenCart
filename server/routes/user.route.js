@@ -1,6 +1,7 @@
 import express from 'express';
 import {
     changePassword,
+    forgotPassword,
     isAuth,
     login,
     loginFacebook,
@@ -8,6 +9,7 @@ import {
     refreshToken,
     register,
     resendVerifyEmail,
+    resetPassword,
     sendVerifyCodeToChangePassword,
     updateUser,
     verifyEmail
@@ -27,5 +29,7 @@ userRouter.post('/resend-verify-email', protectRoute, resendVerifyEmail);
 userRouter.post('/send-code-change-password', protectRoute, sendVerifyCodeToChangePassword);
 userRouter.put('/update', protectRoute, updateUser);
 userRouter.put('/change-password', protectRoute, changePassword);
+userRouter.post('/forgot-password', forgotPassword);
+userRouter.post('/reset-password/:token', resetPassword);
 
 export default userRouter
